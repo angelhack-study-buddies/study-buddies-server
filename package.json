@@ -2,7 +2,7 @@
   "name": "study-buddies-server",
   "version": "1.0.0",
   "description": "study-buddies",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
     "dev": "npm run start:dev",
     "start:dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",

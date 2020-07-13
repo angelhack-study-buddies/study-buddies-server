@@ -1,4 +1,3 @@
-// schema.graphql
 type Query {
   helloWorld: String!
 }
