@@ -46,6 +46,8 @@
     "express": "^4.17.1",
     "graphql": "^15.3.0",
     "http": "0.0.1-security",
-    "ncp": "^2.0.0"
+    "mysql2": "^2.1.0",
+    "ncp": "^2.0.0",
+    "sequelize": "^6.3.3"
   }
 }
