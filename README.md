@@ -5,6 +5,7 @@
 - run: `yarn dev`
 - playground: `http://localhost:3000/graphql`
 - lint: `yarn lint`
+- test: `yarn test`
 
 ## Linting
 
