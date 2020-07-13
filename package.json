@@ -9,6 +9,7 @@
     "start": "node 'dist/server.js'",
     "build": "tsc -p . && ncp src/schema dist/schema",
     "lint": "eslint --fix src/**/*.ts",
+    "test": "jest",
     "gql-gen": "graphql-codegen --config codegen.yml"
   },
   "repository": {
@@ -23,6 +24,8 @@
   },
   "homepage": "https://github.com/roseline124/study-buddies-server#readme",
   "devDependencies": {
+    "@types/jest": "^26.0.4",
+    "jest": "^26.1.0",
     "@graphql-codegen/cli": "1.17.0",
     "@graphql-codegen/typescript": "1.17.0",
     "@graphql-codegen/typescript-resolvers": "1.17.0",
@@ -40,6 +43,7 @@
     "graphql-import": "^1.0.2",
     "graphql-import-node": "0.0.4",
     "nodemon": "^2.0.4",
+    "ts-jest": "^26.1.2",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.6"
   },
