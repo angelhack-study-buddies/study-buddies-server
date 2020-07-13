@@ -9,7 +9,8 @@
     "start": "node 'dist/server.js'",
     "build": "tsc -p . && ncp src/schema dist/schema",
     "lint": "eslint --fix src/**/*.ts",
-    "test": "jest"
+    "test": "jest",
+    "gql-gen": "graphql-codegen --config codegen.yml"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,9 @@
   "devDependencies": {
     "@types/jest": "^26.0.4",
     "jest": "^26.1.0",
+    "@graphql-codegen/cli": "1.17.0",
+    "@graphql-codegen/typescript": "1.17.0",
+    "@graphql-codegen/typescript-resolvers": "1.17.0",
     "@types/compression": "^1.7.0",
     "@types/express": "^4.17.7",
     "@types/graphql": "^14.5.0",
