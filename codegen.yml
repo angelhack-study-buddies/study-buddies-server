@@ -3,6 +3,9 @@ schema: "src/schema/**/*.graphql"
 documents: null
 generates:
   src/generated/graphql.ts:
+    config:
+      scalars:
+        Date: Date
     plugins:
       - "typescript"
       - "typescript-resolvers"
