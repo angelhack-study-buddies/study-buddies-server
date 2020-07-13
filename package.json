@@ -1,0 +1,26 @@
+{
+  "name": "study-buddies-server",
+  "version": "1.0.0",
+  "description": "study-buddies",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run start:dev",
+    "start:dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roseline124/study-buddies-server.git"
+  },
+  "keywords": [],
+  "author": "study-buddies",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roseline124/study-buddies-server/issues"
+  },
+  "homepage": "https://github.com/roseline124/study-buddies-server#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
+  }
+}
