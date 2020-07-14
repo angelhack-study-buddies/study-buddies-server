@@ -26,3 +26,15 @@ MY_NAME=STUDY_BUDDIES
 ```
 export const MY_NAME = process.env.MY_NAME
 ```
+
+## Connect DB
+
+Use local database until migrated.
+Don't forget to sync your mysql setting and env vars in `config.ts`
+
+- run mysql image: `docker run -d -p 9876:3306 -e MYSQL_ROOT_PASSWORD={password} mysql:5.7`
+- check containerID: `docker ps -a`
+- connect to docker container: `docker exec -it {containerID} sh`
+- connect to mysql: `mysql -u root -p`. password is above
+- create db: `CREATE DATABASE studybuddies;`
+- sync the db and sequelize model: `yarn dev` (`sequelize.sync` in server.ts automatically creates tables to db)
