@@ -55,6 +55,7 @@
     "http": "0.0.1-security",
     "jest": "^26.1.0",
     "mysql2": "^2.1.0",
+    "passport-google": "^0.3.0",
     "sequelize": "^6.3.3",
     "ts-jest": "^26.1.2",
     "typescript": "^3.9.6"
