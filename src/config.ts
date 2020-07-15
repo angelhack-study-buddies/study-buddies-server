@@ -10,3 +10,5 @@ export const MYSQL_PORT = process.env.MYSQL_PORT || 9876
 export const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD || '1234'
 export const MYSQL_USERNAME = process.env.MYSQL_USERNAME || 'root'
 export const NODE_ENV = process.env.NODE_ENV || 'development'
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || 'development'
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || 'development'
