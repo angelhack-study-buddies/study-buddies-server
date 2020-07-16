@@ -36,6 +36,7 @@ async function run() {
 
   passportInitialize()
 
+  // @ts-ignore
   const MysqlSessionStore = new MySQLStore(session)
   app.use(
     session({
@@ -59,11 +60,19 @@ async function run() {
   app.use(passport.initialize())
   app.use(passport.session())
 
-  app.get('/login', passport.authenticate('google', { scope: ['profile', 'email'] }))
+  app.get('/login', (req, res) => {
+    if (req?.session?.logined) {
+      res.redirect(CLIENT_BASE_URL)
+    }
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+  })
+
+  // app.get('/login', passport.authenticate('google', { scope: ['profile', 'email'] }))
   app.get(
     '/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     (req, res) => {
+      console.log('req', req)
       res.redirect(CLIENT_BASE_URL)
     },
   )

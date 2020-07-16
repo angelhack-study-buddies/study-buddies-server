@@ -1368,6 +1368,13 @@
   resolved "https://registry.yarnpkg.com/@types/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
   integrity sha512-OCutwjDZ4aFS6PB1UZ988C4YgwlBHJd6wCeQqaLdmadZ/7e+w79+hbMUFC1QXDNCmdyoRfAFdm0RypzwR+Qpag==
 
+"@types/express-mysql-session@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@types/express-mysql-session/-/express-mysql-session-2.1.1.tgz#a58fd612ed045e6ac315e5a015a7ecbd592f5816"
+  integrity sha512-L/YUgd6VZEjmvM8tUjl3hM6rsiJZCSNLuwU2Czz0Wlx+qHZhaubRynHorDSAv+U2+ojDufKp/l4nicmbLu6QRw==
+  dependencies:
+    "@types/express-session" "*"
+
 "@types/express-serve-static-core@*":
   version "4.17.8"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.8.tgz#b8f7b714138536742da222839892e203df569d1c"
@@ -1377,7 +1384,7 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
 
-"@types/express-session@^1.17.0":
+"@types/express-session@*", "@types/express-session@^1.17.0":
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/@types/express-session/-/express-session-1.17.0.tgz#770daf81368f6278e3e40dd894e1e52abbdca0cd"
   integrity sha512-OQEHeBFE1UhChVIBhRh9qElHUvTp4BzKKHxMDkGHT7WuYk5eL93hPG7D8YAIkoBSbhNEY0RjreF15zn+U0eLjA==
