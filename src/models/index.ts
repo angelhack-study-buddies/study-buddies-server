@@ -2,7 +2,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { Sequelize, DataTypes } from 'sequelize'
+import { Sequelize } from 'sequelize'
 import { MYSQL_USERNAME, MYSQL_PASSWORD, MYSQL_DATABASE, MYSQL_HOST, MYSQL_PORT } from '../config'
 
 const basename = path.basename(__filename)
@@ -23,7 +23,9 @@ fs.readdirSync(__dirname)
   .forEach(file => {
     // @ts-ignore
     const model = require(path.join(__dirname, file)).init(sequelize)
-    db[model.name] = model
+    if (model) {
+      db[model?.name] = model
+    }
   })
 
 Object.keys(db).forEach(modelName => {
