@@ -25,12 +25,6 @@ async function run() {
   sequelize.sync()
   const app = express()
 
-  const server = new ApolloServer({
-    schema,
-    validationRules: [depthLimit(7)],
-    playground: true,
-  })
-
   app.options('*', cors())
   app.use(compression())
 
@@ -65,10 +59,7 @@ async function run() {
   app.get(
     '/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
-    (req, res) => {
-      req.session.user = req?.user
-      req.session.logined = !!req?.user
-
+    (req, res, next) => {
       res.redirect(CLIENT_BASE_URL)
     },
   )
@@ -76,6 +67,12 @@ async function run() {
   app.get('/logout', (req, res) => {
     req.session.destroy(() => {})
     res.redirect(CLIENT_BASE_URL)
+  })
+
+  const server = new ApolloServer({
+    schema,
+    validationRules: [depthLimit(7)],
+    playground: true,
   })
 
   server.applyMiddleware({ app, path: '/graphql' })
