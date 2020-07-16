@@ -1,43 +1,42 @@
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from './config'
-
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
-import { User } from './models/User'
 import passport from 'passport'
 
-// Use the GoogleStrategy within Passport.
-//   Strategies in Passport require a `verify` function, which accept
-//   credentials (in this case, an accessToken, refreshToken, and Google
-//   profile), and invoke a callback with a user object.
-
-interface GoogleUser {
-  id: string
-}
-
-passport.serializeUser(function (user: GoogleUser, done) {
-  done(null, user.id)
-})
-
-passport.deserializeUser(async (id: string, done) => {
-  try {
-    const user = await User.findByPk(id)
-    done(null, user)
-  } catch (error) {
-    done(error)
-  }
-})
+import { User } from './models/User'
+import { User as UserType } from './generated/graphql'
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, SERVER_BASE_URL } from './config'
 
 const googleStrategy = new GoogleStrategy(
   {
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/auth/google/callback',
+    callbackURL: `${SERVER_BASE_URL}/auth/google/callback`,
   },
-  function (accessToken, refreshToken, profile, done) {
-    // User.findOrCreate({ id: profile.name }, function (err, user) {
-    //   return done(err, user)
-    // })
-    console.log('done~~', done)
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      const user = await User.findOrCreate({
+        where: { id: profile.id },
+        defaults: { name: profile.displayName, id: profile.id, email: profile._json.email },
+      })
+      done(undefined, user)
+    } catch (error) {
+      done(error)
+    }
   },
 )
 
-passport.use('google', googleStrategy)
+export const passportInitialize = () => {
+  passport.use('google', googleStrategy)
+
+  passport.serializeUser(function (user: UserType, done) {
+    done(null, user)
+  })
+
+  passport.deserializeUser(async (id: string, done) => {
+    try {
+      const user = await User.findByPk(id)
+      done(null, user)
+    } catch (error) {
+      done(error)
+    }
+  })
+}

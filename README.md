@@ -27,6 +27,13 @@ MY_NAME=STUDY_BUDDIES
 export const MY_NAME = process.env.MY_NAME
 ```
 
+**env vars list**
+
+- GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET: google oauth login
+- MYSQL\_\*: mysql db config
+- SERVER_BASE_URL: server endpoint
+- NODE_ENV: development or production
+
 ## Connect DB
 
 Use local database until migrated.
