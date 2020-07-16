@@ -1,11 +1,20 @@
-import { DataTypes, Model, Sequelize, BelongsTo, BelongsToGetAssociationMixin } from 'sequelize'
+import {
+  DataTypes,
+  Model,
+  Sequelize,
+  BelongsTo,
+  BelongsToGetAssociationMixin,
+  HasMany,
+  HasManyGetAssociationsMixin,
+} from 'sequelize'
 import { User } from './User'
+import { HashTag } from './HashTag'
+import { PostHashTagConnection } from './PostHashTagConnection'
 
 export class Post extends Model {
-  readonly id!: string
+  readonly id!: number
   authorID!: string
   url!: string
-  // hashtagID?: string
   likeCount?: number
   createdAt!: Date
   updatedAt!: Date
@@ -13,20 +22,20 @@ export class Post extends Model {
 
   public static Author: BelongsTo<Post, User>
   public getAuthor!: BelongsToGetAssociationMixin<User>
+
+  public static HashTag: HasMany<Post, HashTag>
+  public static HashTagConnection: HasMany<Post, PostHashTagConnection>
+  public getHashTags!: HasManyGetAssociationsMixin<HashTag>
 }
 
 export function init(sequelize: Sequelize) {
   return Post.init(
     {
       id: {
-        type: DataTypes.INTEGER, // google id is out of range in INT
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      // hashtagID: {
-      //   type: DataTypes.INTEGER,
-      //   field: 'hashtag_id',
-      // },
       authorID: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -69,5 +78,15 @@ export function associate() {
   Post.Author = Post.belongsTo(User, {
     as: 'author',
     foreignKey: 'author_id',
+  })
+  Post.HashTag = Post.belongsToMany(HashTag, {
+    as: 'hashtags',
+    through: PostHashTagConnection,
+    foreignKey: 'post_id',
+    otherKey: 'hashtag_id',
+  })
+  Post.HashTagConnection = Post.hasMany(PostHashTagConnection, {
+    as: 'hashtagConnections',
+    foreignKey: 'post_id',
   })
 }
