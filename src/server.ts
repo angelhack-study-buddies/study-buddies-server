@@ -4,33 +4,11 @@ import depthLimit from 'graphql-depth-limit'
 import express from 'express'
 import passport from 'passport'
 import { ApolloServer } from 'apollo-server-express'
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { createServer } from 'http'
 
 import schema from './schema'
 import { sequelize } from './models'
-import { User } from './models/User'
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from './config'
-import { User as UserType } from './generated/graphql'
-
-const googleStrategy = new GoogleStrategy(
-  {
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/auth/google/callback',
-  },
-  async (accessToken, refreshToken, profile, done) => {
-    try {
-      const user = await User.findOrCreate({
-        where: { id: profile.id },
-        defaults: { name: profile.displayName, id: profile.id, email: profile._json.email },
-      })
-      done(undefined, user)
-    } catch (error) {
-      done(error)
-    }
-  },
-)
+import { passportInitialize } from './passport'
 
 async function run() {
   sequelize.sync()
@@ -46,20 +24,7 @@ async function run() {
   app.use(compression())
 
   // passport config
-  passport.use('google', googleStrategy)
-
-  passport.serializeUser(function (user: UserType, done) {
-    done(null, user)
-  })
-
-  passport.deserializeUser(async (id: string, done) => {
-    try {
-      const user = await User.findByPk(id)
-      done(null, user)
-    } catch (error) {
-      done(error)
-    }
-  })
+  passportInitialize()
 
   app.use(passport.initialize())
   app.use(passport.session())
