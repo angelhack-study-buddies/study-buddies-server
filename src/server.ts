@@ -23,7 +23,6 @@ async function run() {
   app.options('*', cors())
   app.use(compression())
 
-  // passport config
   passportInitialize()
 
   app.use(passport.initialize())
