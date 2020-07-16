@@ -1,4 +1,5 @@
-import { DataTypes, Model, Sequelize } from 'sequelize'
+import { DataTypes, Model, Sequelize, HasMany, HasManyGetAssociationsMixin } from 'sequelize'
+import { Post } from './Post'
 
 export class User extends Model {
   readonly id!: string
@@ -7,6 +8,9 @@ export class User extends Model {
   createdAt!: Date
   updatedAt!: Date
   deletedAt?: Date
+
+  public static Posts: HasMany<User, Post>
+  public getPosts!: HasManyGetAssociationsMixin<Post>
 }
 
 export function init(sequelize: Sequelize) {
@@ -44,4 +48,11 @@ export function init(sequelize: Sequelize) {
       collate: 'utf8_unicode_ci',
     },
   )
+}
+
+export function associate() {
+  User.Posts = User.hasMany(Post, {
+    as: 'posts',
+    foreignKey: 'author_id',
+  })
 }
