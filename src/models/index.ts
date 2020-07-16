@@ -2,7 +2,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { Sequelize, DataTypes } from 'sequelize'
+import { Sequelize } from 'sequelize'
 import { MYSQL_USERNAME, MYSQL_PASSWORD, MYSQL_DATABASE, MYSQL_HOST, MYSQL_PORT } from '../config'
 
 const basename = path.basename(__filename)
