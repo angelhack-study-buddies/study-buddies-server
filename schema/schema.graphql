@@ -7,8 +7,11 @@ type Query {
   getPostByHashtag: [Post!]!
 }
 type Mutation {
-  # 전 잠시 화장실좀!
+  # stagedChanges는 괜찮고, resolverMaps는 복사해놨다가 post.resolver.ts 파일 만들어서 거기에
+  # 복붙할까요?
+  # 그리고 merge 넹넹
   postCreate(authorID: String!, url: String!, hashtags: [HashTag!]!): Post!
   postUpdate(id: ID!, authorID: String!, url: String!, hashtag: [HashTag!]!): Boolean!
   postDelete(id: ID!): Boolean!
-} #다녀오세여!!
+}
+# 너무좋아요
