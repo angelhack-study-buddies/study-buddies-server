@@ -1,23 +1,24 @@
 // resolverMap.ts
-import { IResolvers } from 'graphql-tools'
+import { Resolvers } from './generated/graphql'
 
-const resolverMap: IResolvers = {
+// 아직 에러가 나나요?
+const resolverMap: Resolvers = {
   Query: {
-    helloWorld(_: void, args: void, { currentUser }): string {
+    helloWorld(_, args, { currentUser }): string {
       if (currentUser) {
         return currentUser.name
       }
       return `👋 Hello world! 👋`
     },
-    async getPost(_: void, { id }, { models }) {
+    async getPost(_, { id }, { models }) {
       return models.Post.findByPk(id)
     },
-    async getAllPosts(_: void, args: void, { models }) {
+    async getAllPosts(_, args, { models }) {
       return models.Post.findAll()
     },
   },
-  Mutations: {
-    async createPost(_: void, { url, hashtag }, { models }) {
+  Mutation: {
+    async createPost(_, { url, hashtag }, { models }) {
       return models.Post.create({
         url,
         hashtag,

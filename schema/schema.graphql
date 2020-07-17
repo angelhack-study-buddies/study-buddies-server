@@ -1,18 +1,14 @@
 scalar Date
 
-# import User from "User.graphql"
-# import Post from "Post.graphql"
-# import HashTag from "HashTag.graphql"
-
 type Query {
   helloWorld: String!
   getPost(id: Int!): Post
   getAllPosts: [Post!]!
   getPostByHashtag: [Post!]!
 }
-
 type Mutation {
-  createPost(authorID: String!, url: String!, hashtag: [HashTag!]!): Post!
-  updatePost(id: ID!, authorID: String!, url: String!, hashtag: [HashTag!]!): Boolean!
-  deletePost(id: ID!): Boolean!
-}
+  # 전 잠시 화장실좀!
+  postCreate(authorID: String!, url: String!, hashtags: [HashTag!]!): Post!
+  postUpdate(id: ID!, authorID: String!, url: String!, hashtag: [HashTag!]!): Boolean!
+  postDelete(id: ID!): Boolean!
+} #다녀오세여!!
