@@ -1,6 +1,6 @@
 type Post {
   id: ID!
-  authorID: User
+  author: User
   url: String
   likeCount: Int
   title: String # get from og-tag
@@ -9,7 +9,6 @@ type Post {
   hashTags: [HashTag]
   createdAt: Date
 }
-
 type Query {
   post(id: ID!): Post
   postGetMany(input: PostGetManyInput!): postGetManyPayload
