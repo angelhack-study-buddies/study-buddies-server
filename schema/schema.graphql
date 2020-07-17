@@ -1,5 +1,17 @@
 scalar Date
 
+import User from "user.graphql"
+
+type Post{
+  id: ID!
+  authorID: User!
+  url: string!
+  createdAt: Date!
+  hashTag: 
+}
+
+
 type Query {
   helloWorld: String!
+  post: [Post!]!
 }
