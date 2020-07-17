@@ -2,16 +2,9 @@ scalar Date
 
 type Query {
   helloWorld: String!
-  getPost(id: Int!): Post
-  getAllPosts: [Post!]!
-  getPostByHashtag: [Post!]!
 }
-type Mutation {
-  # stagedChanges는 괜찮고, resolverMaps는 복사해놨다가 post.resolver.ts 파일 만들어서 거기에
-  # 복붙할까요?
-  # 그리고 merge 넹넹
-  postCreate(authorID: String!, url: String!, hashtags: [HashTag!]!): Post!
-  postUpdate(id: ID!, authorID: String!, url: String!, hashtag: [HashTag!]!): Boolean!
-  postDelete(id: ID!): Boolean!
+
+enum OrderDirection {
+  DESC
+  ASC
 }
-# 너무좋아요

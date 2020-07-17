@@ -1,7 +1,5 @@
-// resolverMap.ts
-import { Resolvers } from './generated/graphql'
+import { Resolvers } from '../generated/graphql'
 
-// 아직 에러가 나나요?
 const resolverMap: Resolvers = {
   Query: {
     helloWorld(_, args, { currentUser }): string {
@@ -18,7 +16,7 @@ const resolverMap: Resolvers = {
     },
   },
   Mutation: {
-    postCreate(_, { url, hashtags }, { models }) {
+    async postCreate(_, { url, hashtags }, { models }) {
       return models.Post.create({
         url,
         hashtags,

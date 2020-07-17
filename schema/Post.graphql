@@ -1,7 +1,0 @@
-type Post {
-  id: ID!
-  authorID: User
-  url: String
-  createdAt: Date
-  hashTag: [HashTag]
-}

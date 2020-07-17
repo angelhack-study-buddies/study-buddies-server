@@ -1,15 +1,16 @@
 import {
-  DataTypes,
-  Model,
-  Sequelize,
   BelongsTo,
   BelongsToGetAssociationMixin,
+  DataTypes,
   HasMany,
   HasManyGetAssociationsMixin,
+  Model,
+  Sequelize,
 } from 'sequelize'
-import { User } from './User'
+
 import { HashTag } from './HashTag'
 import { PostHashTagConnection } from './PostHashTagConnection'
+import { User } from './User'
 
 export class Post extends Model {
   readonly id!: number
