@@ -4,7 +4,7 @@ import depthLimit from 'graphql-depth-limit'
 import express from 'express'
 import session from 'express-session'
 import MySQLStore from 'express-mysql-session'
-import passport from 'passport'
+import cookieParser from 'cookie-parser'
 import { ApolloServer } from 'apollo-server-express'
 import { createServer } from 'http'
 
@@ -25,9 +25,11 @@ async function run() {
   sequelize.sync()
   const app = express()
 
-  app.options('*', cors())
   app.use(compression())
+  app.use(cookieParser())
 
+  const CORSOption = { origin: true, credentials: true }
+  app.use(cors(CORSOption))
   // @ts-ignore
   const MysqlSessionStore = new MySQLStore(session)
   app.use(
@@ -42,28 +44,30 @@ async function run() {
       secret: COOKIE_SECRET,
       resave: false,
       saveUninitialized: true,
+
       cookie: {
         maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
-        domain: CLIENT_BASE_URL,
-        secure: true,
       },
     }),
   )
 
-  passportInitialize()
+  const passport = passportInitialize()
 
   app.use(passport.initialize())
   app.use(passport.session())
+
+  app.get('/', function (req, res) {
+    res.send(req.user)
+  })
 
   app.get('/login', passport.authenticate('google', { scope: ['profile', 'email'] }))
   app.get(
     '/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
-    (req, res, next) => {
+    (req, res) => {
       res.redirect(CLIENT_BASE_URL)
     },
   )
-
   app.get('/logout', (req, res) => {
     req.session.destroy(() => {})
     res.redirect(CLIENT_BASE_URL)
@@ -71,11 +75,12 @@ async function run() {
 
   const server = new ApolloServer({
     schema,
+    context: ({ req }) => ({ currentUser: req.user }),
     validationRules: [depthLimit(7)],
     playground: true,
   })
 
-  server.applyMiddleware({ app, path: '/graphql' })
+  server.applyMiddleware({ app, path: '/graphql', cors: { origin: true, credentials: true } })
 
   const httpServer = createServer(app)
   httpServer.listen({ port: 3000 }, (): void =>
