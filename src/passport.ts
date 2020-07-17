@@ -1,7 +1,6 @@
 import passport from 'passport'
 
 import { User } from './models/User'
-import { User as UserType } from './generated/graphql'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, SERVER_BASE_URL } from './config'
 
@@ -17,7 +16,8 @@ const googleStrategy = new GoogleStrategy(
         where: { id: profile.id },
         defaults: { name: profile.displayName, id: profile.id, email: profile._json.email },
       })
-      done(undefined, user)
+
+      done(null, user[0])
     } catch (error) {
       done(error)
     }
@@ -27,8 +27,9 @@ const googleStrategy = new GoogleStrategy(
 export const passportInitialize = () => {
   passport.use('google', googleStrategy)
 
-  passport.serializeUser(function (user: UserType, done) {
-    done(null, user)
+  passport.serializeUser((user, done) => {
+    // @ts-ignore
+    done(null, user.id)
   })
 
   passport.deserializeUser(async (id: string, done) => {
@@ -39,4 +40,6 @@ export const passportInitialize = () => {
       done(error)
     }
   })
+
+  return passport
 }
