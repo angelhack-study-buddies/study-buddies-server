@@ -1,8 +1,8 @@
-import { IResolvers } from 'graphql-tools'
+import { Resolvers } from '../generated/graphql'
 
-const resolver: IResolvers = {
+const resolver: Resolvers = {
   Query: {
-    helloWorld(_: void, args: void, { currentUser }): string {
+    helloWorld(_, args, { currentUser }): string {
       if (currentUser) {
         return currentUser.name
       }

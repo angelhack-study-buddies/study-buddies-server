@@ -7,7 +7,6 @@ generates:
       - 'typescript'
       - 'typescript-resolvers'
     config:
-      contextType: Context
       useIndexSignature: true
       mappers:
         User: ../models#User
