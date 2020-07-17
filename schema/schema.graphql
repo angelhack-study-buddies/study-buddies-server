@@ -1,17 +1,18 @@
 scalar Date
 
-import User from "user.graphql"
-
-type Post{
-  id: ID!
-  authorID: User!
-  url: string!
-  createdAt: Date!
-  hashTag: 
-}
-
+# import User from "User.graphql"
+# import Post from "Post.graphql"
+# import HashTag from "HashTag.graphql"
 
 type Query {
   helloWorld: String!
-  post: [Post!]!
+  getPost(id: Int!): Post
+  getAllPosts: [Post!]!
+  getPostByHashtag: [Post!]!
+}
+
+type Mutation {
+  createPost(authorID: String!, url: String!, hashtag: [HashTag!]!): Post!
+  updatePost(id: ID!, authorID: String!, url: String!, hashtag: [HashTag!]!): Boolean!
+  deletePost(id: ID!): Boolean!
 }

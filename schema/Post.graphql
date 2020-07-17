@@ -1,0 +1,10 @@
+# import User from "User.graphql"
+# import HashTag from "HashTag.graphql"
+
+type Post {
+  id: ID!
+  authorID: User
+  url: String
+  createdAt: Date
+  hashTag: [HashTag]
+}

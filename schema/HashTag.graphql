@@ -1,0 +1,8 @@
+# import Post from "Post.graphql"
+
+type HashTag {
+  id: ID!
+  name: String
+  postID: Post
+  createdAt: Date
+}

@@ -1,15 +1,6 @@
 // resolverMap.ts
 import { IResolvers } from 'graphql-tools'
 
-interface Post {
-  id: number
-  authorID: string
-  url: string
-  likeCount: number
-  createdAt: Date
-  updatedAt: Date
-  deletedAt: Date
-}
 const resolverMap: IResolvers = {
   Query: {
     helloWorld(_: void, args: void, { currentUser }): string {
@@ -18,8 +9,20 @@ const resolverMap: IResolvers = {
       }
       return `👋 Hello world! 👋`
     },
-    posts: () => {},
+    async getPost(_: void, { id }, { models }) {
+      return models.Post.findByPk(id)
+    },
+    async getAllPosts(_: void, args: void, { models }) {
+      return models.Post.findAll()
+    },
   },
-  Mutations: {},
+  Mutations: {
+    async createPost(_: void, { url, hashtag }, { models }) {
+      return models.Post.create({
+        url,
+        hashtag,
+      })
+    },
+  },
 }
 export default resolverMap
