@@ -1,0 +1,9 @@
+type User {
+  id: ID!
+  name: String
+  email: String
+  consecutiveStudyDays: Int
+  createdAt: Date
+  updatedAt: Date
+  deletedAt: Date
+}
