@@ -2,15 +2,24 @@ import { PostOrderField, Resolvers } from '../generated/graphql'
 
 import { Op } from 'sequelize'
 import { Post } from '../models/Post'
+import { LikePost } from '../models/LikePost'
 
 const resolverMap: Resolvers = {
   Post: {
     // TODO: title, content, previewImage resolver 추가
-    author: async (post: Post) => {
+    author: async post => {
       return await post.getAuthor()
     },
-    hashTags: async (post: Post) => {
+    hashTags: async post => {
       return await post.getHashTags()
+    },
+    isLiked: async post => {
+      const likePost = await LikePost.findOne({ where: { postID: post.id } })
+      return !!likePost
+    },
+    likeCount: async post => {
+      const likePosts = await post.getLikePosts()
+      return likePosts?.length
     },
   },
   Query: {
