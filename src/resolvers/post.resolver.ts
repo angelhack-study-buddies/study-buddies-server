@@ -116,7 +116,7 @@ const resolverMap: Resolvers = {
         await Promise.all(
           hashTags.map(async hashTagName => {
             const [hashTag] = await HashTag.findOrCreate({
-              where: { name: hashTagName },
+              where: { name: hashTagName, postID: post?.id },
             })
             await PostHashTagConnection.create({
               postID: post?.id,
@@ -148,7 +148,7 @@ const resolverMap: Resolvers = {
         await Promise.all(
           hashTags.map(async hashTagName => {
             const [hashTag] = await HashTag.findOrCreate({
-              where: { name: hashTagName },
+              where: { name: hashTagName, postID: id },
             })
             await PostHashTagConnection.findOrCreate({
               where: { postID: id, hashtagID: hashTag?.id },
