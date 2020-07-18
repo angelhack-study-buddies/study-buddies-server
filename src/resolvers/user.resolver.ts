@@ -1,7 +1,7 @@
 import { Resolvers } from '../generated/graphql'
 import { User } from '../models/User'
 import { Post } from '../models/Post'
-
+import { Follow } from '../models/Follow'
 import differenceInDays from 'date-fns/differenceInDays'
 
 const resolver: Resolvers = {
@@ -44,6 +44,31 @@ const resolver: Resolvers = {
     },
     userIsLoggedIn: async (_, __, { currentUser }) => {
       return !!currentUser
+    },
+  },
+  Mutation: {
+    // follow: async (_, { followingUserID }, { currentUser }) => {
+    follow: async (_, { followingUserID }) => {
+      // if (!currentUser) {
+      //   new AuthenticationError(PERMISSION_ERROR)
+      // }
+
+      const currentUser = await User.findByPk('111509060843271067545')
+
+      const followOption = {
+        followingUserID,
+        followerID: currentUser.id,
+      }
+
+      const follow = await Follow.findOne({ where: followOption })
+
+      if (!follow) {
+        const follow = await Follow.create(followOption)
+        return !!follow
+      }
+
+      await follow.destroy()
+      return false
     },
   },
 }

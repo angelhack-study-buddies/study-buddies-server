@@ -1,9 +1,0 @@
-type Follow {
-  id: ID!
-  follower: User!
-  followingUser: User!
-}
-
-type Mutation {
-  follow(followingUserID: ID!): Boolean
-}

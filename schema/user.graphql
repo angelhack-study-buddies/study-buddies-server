@@ -16,3 +16,7 @@ type Query {
   user(id: ID!): User
   userIsLoggedIn: Boolean
 }
+
+type Mutation {
+  follow(followingUserID: ID!): Boolean
+}

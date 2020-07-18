@@ -5,11 +5,8 @@ export class Follow extends Model {
   public readonly id!: number
   public followingUserID!: string
   public followerID!: string
-
   public static Follower: BelongsTo<Follow, User>
-  public getFollower: BelongsToGetAssociationMixin<User>
   public static FollowingUser: BelongsTo<Follow, User>
-  public getFollowingUser: BelongsToGetAssociationMixin<User>
 }
 
 export function init(sequelize: Sequelize) {
