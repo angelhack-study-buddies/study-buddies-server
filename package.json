@@ -65,6 +65,7 @@
     "install": "^0.13.0",
     "jest": "^26.1.0",
     "mysql2": "^2.1.0",
+    "open-graph-scraper": "^4.4.0",
     "passport": "^0.4.1",
     "passport-google": "^0.3.0",
     "passport-google-oauth": "^2.0.0",

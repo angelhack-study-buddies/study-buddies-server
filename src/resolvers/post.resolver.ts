@@ -1,8 +1,10 @@
-import { PostOrderField, Resolvers } from '../generated/graphql'
-
+import ogs from 'open-graph-scraper'
 import { Op } from 'sequelize'
+
+import { PostOrderField, Resolvers } from '../generated/graphql'
 import { Post } from '../models/Post'
 import { LikePost } from '../models/LikePost'
+import { ApolloError } from 'apollo-server-express'
 
 const resolverMap: Resolvers = {
   Post: {
@@ -20,6 +22,39 @@ const resolverMap: Resolvers = {
     likeCount: async post => {
       const likePosts = await post.getLikePosts()
       return likePosts?.length
+    },
+    title: async post => {
+      if (post.url) return ''
+      const { error, result } = await ogs({
+        url: post.url,
+        onlyGetOpenGraphInfo: true,
+      })
+
+      if (error) throw new ApolloError(error)
+
+      return result?.ogTitle || ''
+    },
+    description: async post => {
+      if (post.url) return ''
+      const { error, result } = await ogs({
+        url: post.url,
+        onlyGetOpenGraphInfo: true,
+      })
+
+      if (error) throw new ApolloError(error)
+
+      return result?.ogDescription || ''
+    },
+    previewImage: async post => {
+      if (post.url) return ''
+      const { error, result } = await ogs({
+        url: post.url,
+        onlyGetOpenGraphInfo: true,
+      })
+
+      if (error) throw new ApolloError(error)
+
+      return result?.ogImage?.url || ''
     },
   },
   Query: {

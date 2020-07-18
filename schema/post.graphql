@@ -4,12 +4,13 @@ type Post {
   url: String
   isLiked: Boolean
   likeCount: Int
-  title: String # get from og-tag
-  content: String # get from og-tag
-  previewImage: String # get from og-tag
+  title: String
+  description: String
+  previewImage: String
   hashTags: [HashTag]
   createdAt: Date
 }
+
 type Query {
   post(id: ID!): Post
   postGetMany(input: PostGetManyInput!): postGetManyPayload
