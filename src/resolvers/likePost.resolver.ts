@@ -1,25 +1,18 @@
 import { Resolvers } from '../generated/graphql'
 import { AuthenticationError, ApolloError } from 'apollo-server-express'
 import { Post } from '../models/Post'
+import { User } from '../models/User'
 import { LikePost } from '../models/LikePost'
 import { NOT_FOUND_ERROR, PERMISSION_ERROR } from '../errorMessages'
 
 const resolver: Resolvers = {
-  LikePost: {
-    // user: async likePost => {
-    //   return await likePost.getUser()
-    // },
-    // post: async likePost => {
-    //   return await likePost.getPost()
-    // },
-  },
   Mutation: {
     likePost: async (_, { postID }, { currentUser }) => {
       if (!currentUser) {
         throw new AuthenticationError(PERMISSION_ERROR)
       }
       const post = await Post.findByPk(postID)
-      if (post) {
+      if (!post) {
         throw new ApolloError(NOT_FOUND_ERROR)
       }
 

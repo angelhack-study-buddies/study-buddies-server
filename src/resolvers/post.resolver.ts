@@ -18,12 +18,13 @@ const resolver: Resolvers = {
     hashTags: async post => {
       return await HashTag.findAll({ where: { postID: post?.id } })
     },
-    isLiked: async post => {
-      const likePost = await LikePost.findOne({ where: { postID: post.id } })
+    isLiked: async (post, _, { currentUser }) => {
+      if (!currentUser) return false
+      const likePost = await LikePost.findOne({ where: { postID: post?.id, userID: currentUser?.id } })
       return !!likePost
     },
     likeCount: async post => {
-      const likePosts = await post.getLikePosts()
+      const likePosts = await LikePost.findAll({ where: { postID: post?.id } })
       return likePosts?.length
     },
     title: async post => {
