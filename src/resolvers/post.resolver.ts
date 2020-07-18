@@ -10,7 +10,7 @@ const resolverMap: Resolvers = {
     author: async (post: Post) => {
       return await post.getAuthor()
     },
-    hashtags: async (post: Post) => {
+    hashTags: async (post: Post) => {
       return await post.getHashTags()
     },
   },

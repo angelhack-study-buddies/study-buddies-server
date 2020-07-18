@@ -23,13 +23,13 @@ type Mutation {
 input PostCreateInput {
   authorID: String!
   url: String!
-  hashtags: [String!]
+  hashTags: [String!]
 }
 
 input PostUpdateInput {
   id: ID!
   url: String
-  hashtags: [String!]
+  hashTags: [String!]
   likeCount: Int
 }
 
