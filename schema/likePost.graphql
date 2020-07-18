@@ -1,0 +1,9 @@
+type LikePost {
+  id: ID!
+  user: User!
+  post: Post!
+}
+
+type Query {
+  likePost(postID: ID!): Boolean
+}

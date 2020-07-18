@@ -11,6 +11,7 @@ import {
 import { HashTag } from './HashTag'
 import { PostHashTagConnection } from './PostHashTagConnection'
 import { User } from './User'
+import { LikePost } from './LikePost'
 
 export class Post extends Model {
   readonly id!: number
@@ -22,11 +23,14 @@ export class Post extends Model {
   deletedAt?: Date
 
   public static Author: BelongsTo<Post, User>
-  public getAuthor!: BelongsToGetAssociationMixin<User>
+  public getAuthor: BelongsToGetAssociationMixin<User>
 
   public static HashTag: HasMany<Post, HashTag>
   public static HashTagConnection: HasMany<Post, PostHashTagConnection>
-  public getHashTags!: HasManyGetAssociationsMixin<HashTag>
+  public getHashTags: HasManyGetAssociationsMixin<HashTag>
+
+  public static LikePost: HasMany<Post, LikePost>
+  public getLikePosts: HasManyGetAssociationsMixin<LikePost>
 }
 
 export function init(sequelize: Sequelize) {
