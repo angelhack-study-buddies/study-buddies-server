@@ -1,14 +1,13 @@
 import ogs from 'open-graph-scraper'
 import { ApolloError } from 'apollo-server-express'
-import { Op, WhereOptions } from 'sequelize'
+import { Op } from 'sequelize'
 
 import { HashTag } from '../models/HashTag'
 import { LikePost } from '../models/LikePost'
 import { Post } from '../models/Post'
 import { User } from '../models/User'
 import { PostHashTagConnection } from '../models/PostHashTagConnection'
-import { PostGroup, Resolvers, PostFilter } from '../generated/graphql'
-import { group } from 'console'
+import { Resolvers, PostFilter } from '../generated/graphql'
 
 const resolver: Resolvers = {
   Post: {

@@ -1,7 +1,6 @@
 import { Resolvers } from '../generated/graphql'
 import { AuthenticationError, ApolloError } from 'apollo-server-express'
 import { Post } from '../models/Post'
-import { User } from '../models/User'
 import { LikePost } from '../models/LikePost'
 import { NOT_FOUND_ERROR, PERMISSION_ERROR } from '../errorMessages'
 
