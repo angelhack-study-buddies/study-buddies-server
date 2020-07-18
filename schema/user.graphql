@@ -2,6 +2,7 @@ type User {
   id: ID!
   name: String
   email: String
+  profileURL: String
   consecutiveStudyDays: [Date!]!
   createdAt: Date
   updatedAt: Date
@@ -10,4 +11,5 @@ type User {
 
 type Query {
   user(id: ID!): User
+  userIsLoggedIn: Boolean
 }

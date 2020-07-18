@@ -14,7 +14,12 @@ const googleStrategy = new GoogleStrategy(
     try {
       const user = await User.findOrCreate({
         where: { id: profile.id },
-        defaults: { name: profile.displayName, id: profile.id, email: profile._json.email },
+        defaults: {
+          name: profile.displayName,
+          id: profile.id,
+          email: profile._json.email,
+          profileURL: profile._json.picture,
+        },
       })
 
       done(null, user[0])
