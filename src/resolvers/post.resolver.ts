@@ -7,6 +7,7 @@ import { Op } from 'sequelize'
 import { Post } from '../models/Post'
 import { PostHashTagConnection } from '../models/PostHashTagConnection'
 import ogs from 'open-graph-scraper'
+import { throws } from 'assert'
 
 const resolverMap: Resolvers = {
   Post: {
@@ -124,6 +125,42 @@ const resolverMap: Resolvers = {
           }),
         )
         return { post }
+      } catch (error) {
+        console.log(error)
+        throw new Error(error)
+      }
+    },
+    postUpdate: async (_, { input }) => {
+      try {
+        const { id, url, hashTags, likeCount } = input
+        const post = await Post.findByPk(id)
+        const updatedPost = await post.update({
+          url: url,
+          likeCount: likeCount,
+        })
+        await Promise.all(
+          hashTags.map(async hashTagName => {
+            const [hashTag] = await HashTag.findOrCreate({
+              where: { name: hashTagName },
+            })
+            await PostHashTagConnection.findOrCreate({
+              where: { postID: id, hashtagID: hashTag?.id },
+            })
+          }),
+        )
+        return { post: updatedPost }
+      } catch (error) {
+        console.log(error)
+        throw new Error(error)
+      }
+    },
+    postDelete: async (_, { id }) => {
+      try {
+        const post = await Post.findByPk(id)
+        return post
+          .destroy()
+          .then(() => true)
+          .catch(() => false)
       } catch (error) {
         console.log(error)
         throw new Error(error)
