@@ -4,6 +4,7 @@ type User {
   email: String
   profileURL: String
   consecutiveStudyDays: [Date!]!
+  posts: [Post!]!
   createdAt: Date
   updatedAt: Date
   deletedAt: Date

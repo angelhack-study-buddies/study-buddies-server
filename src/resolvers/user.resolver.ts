@@ -28,6 +28,9 @@ const resolver: Resolvers = {
 
       return consecutiveStudyDays
     },
+    posts: async user => {
+      return await user.getPosts()
+    },
   },
   Query: {
     user: async (_, { id }) => {
