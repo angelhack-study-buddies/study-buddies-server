@@ -47,6 +47,27 @@ const resolver: Resolvers = {
     currentUser: (_, __, { currentUser }) => {
       return currentUser
     },
+    recommendations: async (_, __, { currentUser }) => {
+      const recentPosts = await Post.findAll({
+        where: {
+          authorID: currentUser.id,
+        },
+        order: [['createdAt', 'DESC']],
+        limit: 5,
+      })
+      const hashTags = []
+      recentPosts.map(async post => {
+        const tags = post.getHashTags()
+        ;(await tags).map(async tag => await (hashTags.indexOf(tag) === -1 ? hashTags.push(tag) : ''))
+      })
+      const post = Post.findAll({
+        where: {
+          hashTags: hashTags,
+        },
+        order: ['likeCount'],
+      })
+      return { post }
+    },
   },
   Mutation: {
     follow: async (_, { followerID }, { currentUser }) => {
@@ -68,21 +89,6 @@ const resolver: Resolvers = {
 
       await follow.destroy()
       return false
-    },
-    recommendations: async (_, __, { currentUser }) => {
-      const recentPosts = await Post.findAll({
-        where: {
-          authorID: currentUser.id,
-        },
-        order: [['createdAt', 'DESC']],
-        limit: 5,
-      })
-
-      const hashTags = []
-      recentPosts.map(async post => {
-        const tags = post.getHashTags()
-        ;(await tags).map(async tag => (hashTags.indexOf(tag) === -1 ? hashTags.push(tag) : ''))
-      })
     },
   },
 }
