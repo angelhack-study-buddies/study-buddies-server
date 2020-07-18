@@ -1,4 +1,5 @@
-import { DataTypes, Model, Sequelize, HasMany, HasManyGetAssociationsMixin } from 'sequelize'
+import { DataTypes, HasMany, HasManyGetAssociationsMixin, Model, Sequelize } from 'sequelize'
+
 import { Post } from './Post'
 
 export class User extends Model {
@@ -59,5 +60,6 @@ export function associate() {
   User.Posts = User.hasMany(Post, {
     as: 'posts',
     foreignKey: 'author_id',
+    onDelete: 'cascade',
   })
 }

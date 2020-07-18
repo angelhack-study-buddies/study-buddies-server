@@ -138,6 +138,7 @@ const resolverMap: Resolvers = {
           url: url,
           likeCount: likeCount,
         })
+
         await Promise.all(
           hashTags.map(async hashTagName => {
             const [hashTag] = await HashTag.findOrCreate({
@@ -148,6 +149,7 @@ const resolverMap: Resolvers = {
             })
           }),
         )
+
         return { post: updatedPost }
       } catch (error) {
         console.log(error)
