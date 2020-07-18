@@ -139,6 +139,12 @@ const resolverMap: Resolvers = {
           likeCount: likeCount,
         })
 
+        const currentTagConnections = await HashTag.findAll({
+          where: { postID: id },
+        })
+        currentTagConnections.map(current => {
+          current.destroy()
+        })
         await Promise.all(
           hashTags.map(async hashTagName => {
             const [hashTag] = await HashTag.findOrCreate({
