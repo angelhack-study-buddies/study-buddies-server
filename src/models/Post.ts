@@ -14,7 +14,7 @@ import { PostHashTagConnection } from './PostHashTagConnection'
 export class Post extends Model {
   readonly id!: number
   authorID!: string
-  url!: string
+  url?: string
   likeCount?: number
   createdAt!: Date
   updatedAt!: Date

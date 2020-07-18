@@ -1,11 +1,17 @@
 overwrite: true
-schema: "schema/**/*.graphql"
+schema: 'schema/**/*.graphql'
 documents: null
 generates:
   src/generated/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-resolvers'
     config:
+      useIndexSignature: true
+      mappers:
+        User: ../models#User
+        HashTag: ../models#HashTag
+        Post: ../models#Post
+        LikePost: ../models#LikePost
       scalars:
         Date: Date
-    plugins:
-      - "typescript"
-      - "typescript-resolvers"
