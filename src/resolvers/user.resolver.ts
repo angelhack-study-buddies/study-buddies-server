@@ -6,6 +6,15 @@ import differenceInDays from 'date-fns/differenceInDays'
 
 const resolver: Resolvers = {
   User: {
+    posts: async user => {
+      return await user.getPosts()
+    },
+    followers: async user => {
+      return await user.getFollowers()
+    },
+    followingUsers: async user => {
+      return await user.getFollowingUsers()
+    },
     consecutiveStudyDays: async user => {
       const posts = await Post.findAll({
         where: {
@@ -27,9 +36,6 @@ const resolver: Resolvers = {
         }, [])
 
       return consecutiveStudyDays
-    },
-    posts: async user => {
-      return await user.getPosts()
     },
   },
   Query: {

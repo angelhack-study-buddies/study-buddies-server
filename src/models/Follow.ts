@@ -1,4 +1,4 @@
-import { Sequelize, Model, DataTypes, BelongsTo } from 'sequelize'
+import { Sequelize, Model, DataTypes, BelongsTo, BelongsToGetAssociationMixin } from 'sequelize'
 import { User } from '../models/User'
 
 export class Follow extends Model {
@@ -7,7 +7,9 @@ export class Follow extends Model {
   public followerID!: string
 
   public static Follower: BelongsTo<Follow, User>
+  public getFollower: BelongsToGetAssociationMixin<User>
   public static FollowingUser: BelongsTo<Follow, User>
+  public getFollowingUser: BelongsToGetAssociationMixin<User>
 }
 
 export function init(sequelize: Sequelize) {
