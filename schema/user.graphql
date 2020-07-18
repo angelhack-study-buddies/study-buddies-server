@@ -12,4 +12,5 @@ type User {
 type Query {
   user(id: ID!): User
   userIsLoggedIn: Boolean
+  recommendations: [Post!]!
 }

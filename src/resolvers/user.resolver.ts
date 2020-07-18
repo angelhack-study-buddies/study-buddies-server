@@ -1,7 +1,6 @@
+import { Post } from '../models/Post'
 import { Resolvers } from '../generated/graphql'
 import { User } from '../models/User'
-import { Post } from '../models/Post'
-
 import differenceInDays from 'date-fns/differenceInDays'
 
 const resolver: Resolvers = {
@@ -35,6 +34,21 @@ const resolver: Resolvers = {
     },
     userIsLoggedIn: async (_, __, { currentUser }) => {
       return !!currentUser
+    },
+    recommendations: async (_, __, { currentUser }) => {
+      const recentPosts = await Post.findAll({
+        where: {
+          authorID: currentUser.id,
+        },
+        order: [['createdAt', 'DESC']],
+        limit: 5,
+      })
+
+      const hashTags = []
+      recentPosts.map(async post => {
+        const tags = post.getHashTags()
+        ;(await tags).map(async tag => (hashTags.indexOf(tag) === -1 ? hashTags.push(tag) : ''))
+      })
     },
   },
 }
