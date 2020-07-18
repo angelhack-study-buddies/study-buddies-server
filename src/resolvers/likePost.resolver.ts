@@ -13,7 +13,7 @@ const resolver: Resolvers = {
       return await likePost.getPost()
     },
   },
-  Query: {
+  Mutation: {
     likePost: async (_, { postID }, { currentUser }) => {
       if (!currentUser) {
         throw new AuthenticationError(PERMISSION_ERROR)
