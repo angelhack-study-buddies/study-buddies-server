@@ -1,7 +1,7 @@
 type HashTag {
   id: ID!
   name: String
-  post: Post
+  posts: [Post!]
   createdAt: Date
 }
 

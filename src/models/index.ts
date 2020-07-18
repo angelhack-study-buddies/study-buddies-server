@@ -17,6 +17,7 @@ export async function sequelizeInit() {
     host: MYSQL_HOST,
     port: Number(MYSQL_PORT),
     dialect: 'mysql',
+    // logging: console.log,
     logging: false,
     define: { freezeTableName: false },
   })
@@ -25,15 +26,15 @@ export async function sequelizeInit() {
   initPost(sequelize)
   initHashTag(sequelize)
   initFollow(sequelize)
-  initPostHashTagConnection(sequelize)
   initLikePost(sequelize)
+  initPostHashTagConnection(sequelize)
 
   associateUser()
   associatePost()
   associateHashTag()
   associateFollow()
-  associatePostHashTagConnection()
   associateLikePost()
+  associatePostHashTagConnection()
 
   await sequelize.sync()
   return sequelize

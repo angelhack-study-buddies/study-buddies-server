@@ -1,21 +1,22 @@
-import { PostOrderField, Resolvers } from '../generated/graphql'
-
+import ogs from 'open-graph-scraper'
 import { ApolloError } from 'apollo-server-express'
+import { Op, WhereOptions } from 'sequelize'
+
 import { HashTag } from '../models/HashTag'
 import { LikePost } from '../models/LikePost'
-import { Op } from 'sequelize'
 import { Post } from '../models/Post'
+import { User } from '../models/User'
 import { PostHashTagConnection } from '../models/PostHashTagConnection'
-import ogs from 'open-graph-scraper'
-import { throws } from 'assert'
+import { PostGroup, Resolvers, PostFilter } from '../generated/graphql'
+import { group } from 'console'
 
-const resolverMap: Resolvers = {
+const resolver: Resolvers = {
   Post: {
     author: async post => {
-      return await post.getAuthor()
+      return await User.findByPk(post?.authorID)
     },
     hashTags: async post => {
-      return await post.getHashTags()
+      return await HashTag.findAll({ where: { postID: post?.id } })
     },
     isLiked: async post => {
       const likePost = await LikePost.findOne({ where: { postID: post.id } })
@@ -64,44 +65,17 @@ const resolverMap: Resolvers = {
       return await Post.findByPk(id)
     },
     postGetMany: async (_, { input }) => {
-      const { filterBy, orderBy } = input
+      const { filterBy, orderBy, pagination } = input
 
-      let orderField
-      if (orderBy?.field === PostOrderField.LikeCount) {
-        orderField = 'like_count'
-      }
-      if (orderBy?.field === PostOrderField.CreatedAt) {
-        orderField = 'created_at'
-      }
+      const defaultPagination = { page: 1, pageSize: 10 }
+      const finalPagination = pagination || defaultPagination
 
-      let group
-      if (filterBy.authorIDs.length) {
-        group.push('authorID')
-      }
-      if (filterBy.hashTagIDs.length) {
-        group.push('hashTagID')
-      }
-
+      const filterOptions = buildPostGetManyFilterOption(filterBy)
       const posts = await Post.findAll({
-        where: {
-          ...(filterBy.authorIDs && {
-            authorID: { [Op.in]: filterBy.authorIDs },
-          }),
-        },
-        ...(filterBy.hashTagIDs && {
-          include: [
-            {
-              association: Post.HashTag,
-              as: 'hashtags',
-              attributes: ['id', 'hashTagID'],
-              where: {
-                id: { [Op.in]: filterBy.hashTagIDs },
-              },
-            },
-          ],
-        }),
-        group: ['authorID', 'hashTagID'],
-        ...(orderBy && [[orderField, orderBy.direction]]),
+        ...filterOptions,
+        ...(orderBy && { order: [[orderBy?.field.toLowerCase(), orderBy?.direction]] }),
+        offset: (finalPagination.page - 1) * finalPagination.pageSize,
+        limit: finalPagination.pageSize,
       })
 
       return { posts }
@@ -131,8 +105,8 @@ const resolverMap: Resolvers = {
     },
     postUpdate: async (_, { input }) => {
       try {
-        const { id, url, hashTags, likeCount } = input
-        const post = await Post.findByPk(id)
+        const { id: postID, url, hashTags, likeCount } = input
+        const post = await Post.findByPk(postID)
         const updatedPost = await post.update({
           url: url,
           likeCount: likeCount,
@@ -141,12 +115,14 @@ const resolverMap: Resolvers = {
         if (hashTags?.length) {
           await Promise.all(
             hashTags?.map(async hashTagName => {
-              const [hashTag] = await HashTag.findOrCreate({
-                where: { name: hashTagName, postID: id },
+              const [hashTag, created] = await HashTag.findOrCreate({
+                where: { postID },
+                defaults: { name: hashTagName, postID },
               })
-              await PostHashTagConnection.findOrCreate({
-                where: { postID: id, hashtagID: hashTag?.id },
-              })
+
+              if (created) {
+                await PostHashTagConnection.create({ postID, hashtagID: hashTag?.id })
+              }
             }),
           )
         }
@@ -171,4 +147,27 @@ const resolverMap: Resolvers = {
     },
   },
 }
-export default resolverMap
+export default resolver
+
+const buildPostGetManyFilterOption = (filterBy: PostFilter) => {
+  const likeClause = filterBy?.hashTags?.map(tag => ({ [Op.like]: `%${tag}%` }))
+  const likeOptions = { [Op.or]: likeClause }
+
+  return {
+    where: {
+      ...(filterBy?.authorIDs && {
+        authorID: { [Op.in]: filterBy.authorIDs },
+      }),
+    },
+    ...(filterBy?.hashTags && {
+      include: [
+        {
+          association: Post.HashTags,
+          as: 'hashtags',
+          attributes: ['name'],
+          ...(filterBy?.hashTags && { where: { name: likeOptions } }),
+        },
+      ],
+    }),
+  }
+}

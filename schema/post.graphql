@@ -13,7 +13,7 @@ type Post {
 
 type Query {
   post(id: ID!): Post
-  postGetMany(input: PostGetManyInput!): postGetManyPayload
+  postGetMany(input: PostGetManyInput!): PostGetManyPayload
 }
 
 type Mutation {
@@ -36,7 +36,7 @@ input PostUpdateInput {
 }
 
 input PostFilter {
-  hashTagIDs: [ID!]
+  hashTags: [String!]
   authorIDs: [ID!]
 }
 
@@ -50,12 +50,18 @@ input PostOrder {
   direction: OrderDirection
 }
 
+enum PostGroup {
+  AUTHOR
+  HASHTAG
+}
+
 input PostGetManyInput {
   filterBy: PostFilter
   orderBy: PostOrder
+  pagination: Pagination
 }
 
-type postGetManyPayload {
+type PostGetManyPayload {
   posts: [Post!]!
 }
 
