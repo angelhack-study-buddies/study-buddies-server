@@ -1,9 +1,11 @@
 import { PostOrderField, Resolvers } from '../generated/graphql'
 
 import { ApolloError } from 'apollo-server-express'
+import { HashTag } from '../models/HashTag'
 import { LikePost } from '../models/LikePost'
 import { Op } from 'sequelize'
 import { Post } from '../models/Post'
+import { PostHashTagConnection } from '../models/PostHashTagConnection'
 import ogs from 'open-graph-scraper'
 
 const resolverMap: Resolvers = {
@@ -110,6 +112,14 @@ const resolverMap: Resolvers = {
       try {
         const { authorID, url, hashTags } = input
         const post = await Post.create({ authorID, url, hashTags })
+        await Promise.all(
+          hashTags.map(async hashTag => {
+            await PostHashTagConnection.create({ post, hashTag })
+            await HashTag.findOrCreate({
+              where: { name: hashTag },
+            })
+          }),
+        )
         return { post }
       } catch (error) {
         console.log(error)
