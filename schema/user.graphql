@@ -5,6 +5,8 @@ type User {
   profileURL: String
   consecutiveStudyDays: [Date!]!
   posts: [Post!]!
+  followingUsers: [User!]!
+  follower: [User!]!
   createdAt: Date
   updatedAt: Date
   deletedAt: Date

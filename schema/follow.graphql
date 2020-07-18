@@ -1,0 +1,9 @@
+type Follow {
+  id: ID!
+  follower: User!
+  followingUser: User!
+}
+
+type Query {
+  follow(followingUserID: ID!): Boolean
+}

@@ -1,5 +1,14 @@
-import { DataTypes, Model, Sequelize, HasMany, HasManyGetAssociationsMixin } from 'sequelize'
+import {
+  DataTypes,
+  Model,
+  Sequelize,
+  HasMany,
+  BelongsToMany,
+  HasManyGetAssociationsMixin,
+  BelongsToManyGetAssociationsMixin,
+} from 'sequelize'
 import { Post } from './Post'
+import { Follow } from './Follow'
 
 export class User extends Model {
   readonly id!: string
@@ -12,6 +21,12 @@ export class User extends Model {
 
   public static Posts: HasMany<User, Post>
   public getPosts!: HasManyGetAssociationsMixin<Post>
+
+  public static Followers: BelongsToMany<User, User>
+  public getFollowers!: BelongsToManyGetAssociationsMixin<User>
+
+  public static FollowingUsers: BelongsToMany<User, User>
+  public getFollowingUsers!: BelongsToManyGetAssociationsMixin<User>
 }
 
 export function init(sequelize: Sequelize) {
@@ -59,5 +74,15 @@ export function associate() {
   User.Posts = User.hasMany(Post, {
     as: 'posts',
     foreignKey: 'author_id',
+  })
+  User.Followers = User.belongsToMany(User, {
+    as: 'followers',
+    through: Follow,
+    foreignKey: 'follower_id',
+  })
+  User.FollowingUsers = User.belongsToMany(User, {
+    as: 'followingUsers',
+    through: Follow,
+    foreignKey: 'following_id',
   })
 }
