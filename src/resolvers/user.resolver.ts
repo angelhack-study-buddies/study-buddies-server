@@ -14,7 +14,7 @@ const resolver: Resolvers = {
         order: [['created_at', 'DESC']],
       })
 
-      if (!posts.length) return 0
+      if (!posts.length) return []
 
       const consecutiveStudyDays = posts?.reduce((accDays: Date[], post) => {
         const previousDate = accDays[accDays.length - 1]
@@ -24,7 +24,7 @@ const resolver: Resolvers = {
         return accDays
       }, [])
 
-      return consecutiveStudyDays?.length ?? 0
+      return consecutiveStudyDays
     },
   },
   Query: {
