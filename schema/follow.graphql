@@ -4,6 +4,6 @@ type Follow {
   followingUser: User!
 }
 
-type Query {
+type Mutation {
   follow(followingUserID: ID!): Boolean
 }
