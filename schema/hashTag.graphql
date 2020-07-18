@@ -1,0 +1,6 @@
+type HashTag {
+  id: ID!
+  name: String
+  postID: Post
+  createdAt: Date
+}

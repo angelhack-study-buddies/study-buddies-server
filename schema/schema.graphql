@@ -3,3 +3,8 @@ scalar Date
 type Query {
   helloWorld: String!
 }
+
+enum OrderDirection {
+  DESC
+  ASC
+}
