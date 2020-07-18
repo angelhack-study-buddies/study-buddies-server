@@ -14,4 +14,3 @@ const resolverMap: Resolvers = {
     },
   },
 }
-export default resolver

@@ -1,8 +1,0 @@
-type PostHashTagConnection {
-  id: ID!
-  post: Post!
-  hashTag: hashTag!
-}
-type Query {
-  PostHashTagConnection(postID: ID!): Boolean
-}
