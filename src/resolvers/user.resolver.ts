@@ -14,15 +14,17 @@ const resolver: Resolvers = {
         order: [['created_at', 'DESC']],
       })
 
-      if (!posts.length) return []
+      if (!posts.length) return null
 
-      const consecutiveStudyDays = posts?.reduce((accDays: Date[], post) => {
-        const previousDate = accDays[accDays.length - 1]
-        if (!previousDate || differenceInDays(post.createdAt, previousDate) <= 1) {
-          accDays.push(post.createdAt)
-        }
-        return accDays
-      }, [])
+      const consecutiveStudyDays =
+        posts.length &&
+        posts.reduce((accDays: Date[], post) => {
+          const previousDate = accDays[accDays.length - 1]
+          if (!previousDate || differenceInDays(post?.createdAt, previousDate) <= 1) {
+            accDays.push(post?.createdAt)
+          }
+          return accDays
+        }, [])
 
       return consecutiveStudyDays
     },
