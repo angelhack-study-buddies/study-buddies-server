@@ -14,6 +14,7 @@ type Post {
 type Query {
   post(id: ID!): Post
   postGetMany(input: PostGetManyInput!): PostGetManyPayload
+  postGetManyByGroup(input: PostGetManyByGroupInput!): PostGetManyByGroupPayload
 }
 
 type Mutation {
@@ -63,6 +64,20 @@ input PostGetManyInput {
 
 type PostGetManyPayload {
   posts: [Post!]!
+}
+
+input PostGetManyByGroupInput {
+  groupBy: PostGroup
+  limit: Int
+}
+
+type PostCollection {
+  key: String
+  posts: [Post!]!
+}
+
+type PostGetManyByGroupPayload {
+  postCollections: [PostCollection!]
 }
 
 type PostCreatePayload {

@@ -17,8 +17,8 @@ export async function sequelizeInit() {
     host: MYSQL_HOST,
     port: Number(MYSQL_PORT),
     dialect: 'mysql',
-    // logging: console.log,
-    logging: false,
+    logging: console.log,
+    // logging: false,
     define: { freezeTableName: false },
   })
 

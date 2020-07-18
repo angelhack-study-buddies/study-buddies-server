@@ -1,4 +1,7 @@
 import ogs from 'open-graph-scraper'
+import groupBy from 'lodash/groupBy'
+import flatMap from 'lodash/flatMap'
+import uniq from 'lodash/uniq'
 import { ApolloError } from 'apollo-server-express'
 import { Op } from 'sequelize'
 
@@ -7,7 +10,7 @@ import { LikePost } from '../models/LikePost'
 import { Post } from '../models/Post'
 import { User } from '../models/User'
 import { PostHashTagConnection } from '../models/PostHashTagConnection'
-import { Resolvers, PostFilter } from '../generated/graphql'
+import { Resolvers, PostFilter, PostGroup, PostCollection } from '../generated/graphql'
 
 const resolver: Resolvers = {
   Post: {
@@ -82,6 +85,51 @@ const resolver: Resolvers = {
       })
 
       return { posts }
+    },
+    postGetManyByGroup: async (_, { input }) => {
+      const { groupBy: postGroup, limit } = input
+
+      const posts = await Post.findAll({
+        where: { deletedAt: null },
+        limit: limit ?? 50,
+        ...(postGroup === PostGroup.Hashtag && {
+          include: [
+            {
+              association: Post.HashTags,
+              as: 'hashtags',
+              attributes: ['name'],
+            },
+          ],
+        }),
+      })
+
+      if (!posts.length) return null
+
+      if (postGroup === PostGroup.Author) {
+        const groupedPosts = groupBy(posts, post => post.authorID)
+        const postCollections = Object.keys(groupedPosts).map((authorID: string) => {
+          return { key: authorID, posts: groupedPosts[authorID] }
+        })
+        return { postCollections }
+      }
+
+      if (postGroup === PostGroup.Hashtag) {
+        const flattenPosts = flatMap(posts, post => {
+          // @ts-ignore
+          return post.hashtags.map(hashtag => {
+            post['hashtagName'] = hashtag.name
+            return post
+          })
+        })
+        // @ts-ignore
+        const groupedPosts = groupBy(flattenPosts, post => post.hashtagName)
+        const postCollections = Object.keys(groupedPosts).map((hashtagName: string) => {
+          return { key: hashtagName, posts: uniq(groupedPosts[hashtagName]) }
+        })
+        return { postCollections }
+      }
+
+      return null
     },
   },
   Mutation: {
@@ -191,6 +239,7 @@ const buildPostGetManyFilterOption = (filterBy: PostFilter) => {
       ...(filterBy?.authorIDs && {
         authorID: { [Op.in]: filterBy.authorIDs },
       }),
+      deletedAt: null,
     },
     ...(filterBy?.hashTags && {
       include: [
