@@ -14,7 +14,7 @@ const resolver: Resolvers = {
         order: [['created_at', 'DESC']],
       })
 
-      if (!posts.length) return null
+      if (!posts.length) return []
 
       const consecutiveStudyDays =
         posts.length &&
