@@ -26,7 +26,7 @@ const resolverMap: Resolvers = {
       return likePosts?.length
     },
     title: async post => {
-      if (post.url) return ''
+      if (!post.url) return ''
       const { error, result } = await ogs({
         url: post.url,
         onlyGetOpenGraphInfo: true,
@@ -37,7 +37,7 @@ const resolverMap: Resolvers = {
       return result?.ogTitle || ''
     },
     description: async post => {
-      if (post.url) return ''
+      if (!post.url) return ''
       const { error, result } = await ogs({
         url: post.url,
         onlyGetOpenGraphInfo: true,
@@ -48,7 +48,7 @@ const resolverMap: Resolvers = {
       return result?.ogDescription || ''
     },
     previewImage: async post => {
-      if (post.url) return ''
+      if (!post.url) return ''
       const { error, result } = await ogs({
         url: post.url,
         onlyGetOpenGraphInfo: true,
@@ -138,22 +138,18 @@ const resolverMap: Resolvers = {
           likeCount: likeCount,
         })
 
-        const currentTagConnections = await HashTag.findAll({
-          where: { postID: id },
-        })
-        currentTagConnections.map(current => {
-          current.destroy()
-        })
-        await Promise.all(
-          hashTags.map(async hashTagName => {
-            const [hashTag] = await HashTag.findOrCreate({
-              where: { name: hashTagName, postID: id },
-            })
-            await PostHashTagConnection.findOrCreate({
-              where: { postID: id, hashtagID: hashTag?.id },
-            })
-          }),
-        )
+        if (hashTags?.length) {
+          await Promise.all(
+            hashTags?.map(async hashTagName => {
+              const [hashTag] = await HashTag.findOrCreate({
+                where: { name: hashTagName, postID: id },
+              })
+              await PostHashTagConnection.findOrCreate({
+                where: { postID: id, hashtagID: hashTag?.id },
+              })
+            }),
+          )
+        }
 
         return { post: updatedPost }
       } catch (error) {
