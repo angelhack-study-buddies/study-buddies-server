@@ -1,7 +1,6 @@
+import { Post } from '../models/Post'
 import { Resolvers } from '../generated/graphql'
 import { User } from '../models/User'
-import { Post } from '../models/Post'
-
 import differenceInDays from 'date-fns/differenceInDays'
 
 const resolver: Resolvers = {
@@ -33,8 +32,8 @@ const resolver: Resolvers = {
     user: async (_, { id }) => {
       return await User.findByPk(id)
     },
-    userIsLoggedIn: async (_, __, { currentUser }) => {
-      return !!currentUser
+    currentUser: (_, __, { currentUser }) => {
+      return currentUser
     },
   },
 }
