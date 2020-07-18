@@ -5,6 +5,7 @@ export class User extends Model {
   readonly id!: string
   name?: string
   email?: string
+  profileURL?: string
   createdAt!: Date
   updatedAt!: Date
   deletedAt?: Date
@@ -25,6 +26,10 @@ export function init(sequelize: Sequelize) {
       },
       email: {
         type: DataTypes.STRING,
+      },
+      profileURL: {
+        type: DataTypes.STRING,
+        field: 'profile_url',
       },
       createdAt: {
         type: DataTypes.DATE,
