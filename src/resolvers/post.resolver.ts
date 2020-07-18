@@ -1,8 +1,8 @@
 import { PostOrderField, Resolvers } from '../generated/graphql'
 
+import { LikePost } from '../models/LikePost'
 import { Op } from 'sequelize'
 import { Post } from '../models/Post'
-import { LikePost } from '../models/LikePost'
 
 const resolverMap: Resolvers = {
   Post: {
@@ -73,8 +73,8 @@ const resolverMap: Resolvers = {
   Mutation: {
     postCreate: async (_, { input }) => {
       try {
-        const { authorID, url, hashtags } = input
-        const post = await Post.create({ authorID, url, hashtags })
+        const { authorID, url, hashTags } = input
+        const post = await Post.create({ authorID, url, hashTags })
         return { post }
       } catch (error) {
         console.log(error)
