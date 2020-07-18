@@ -1,4 +1,4 @@
-import { BelongsTo, DataTypes, Model, Sequelize } from 'sequelize'
+import { BelongsTo, DataTypes, Model, Sequelize, BelongsToGetAssociationMixin } from 'sequelize'
 
 import { Post } from './Post'
 import { User } from './User'
@@ -10,6 +10,9 @@ export class LikePost extends Model {
   public readonly id!: number
   public postID!: number
   public userID!: string
+
+  public getUser: BelongsToGetAssociationMixin<User>
+  public getPost: BelongsToGetAssociationMixin<Post>
 }
 
 export function init(sequelize: Sequelize) {

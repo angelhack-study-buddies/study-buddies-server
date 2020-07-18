@@ -6,7 +6,7 @@ import differenceInDays from 'date-fns/differenceInDays'
 
 const resolver: Resolvers = {
   User: {
-    consecutiveStudyDays: async (user: User) => {
+    consecutiveStudyDays: async user => {
       const posts = await Post.findAll({
         where: {
           authorID: user.id,
