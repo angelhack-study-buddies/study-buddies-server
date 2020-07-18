@@ -1,7 +1,5 @@
 'use strict'
 
-import fs from 'fs'
-import path from 'path'
 import { Sequelize } from 'sequelize'
 import { MYSQL_USERNAME, MYSQL_PASSWORD, MYSQL_DATABASE, MYSQL_HOST, MYSQL_PORT } from '../config'
 import { init as initFollow, associate as associateFollow } from '../models/Follow'
@@ -23,19 +21,19 @@ export async function sequelizeInit() {
     define: { freezeTableName: false },
   })
 
-  initFollow(sequelize)
-  initHashTag(sequelize)
-  initLikePost(sequelize)
   initUser(sequelize)
   initPost(sequelize)
+  initHashTag(sequelize)
+  initFollow(sequelize)
   initPostHashTagConnection(sequelize)
+  initLikePost(sequelize)
 
   associateUser()
   associatePost()
   associateHashTag()
-  associatePostHashTagConnection()
   associateFollow()
-  // associateLikePost() // TODO:: Fix Foreign Key Error
+  associatePostHashTagConnection()
+  associateLikePost() // TODO:: Fix Foreign Key Error
 
   await sequelize.sync()
   return sequelize
