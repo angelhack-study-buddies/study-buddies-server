@@ -33,6 +33,9 @@ const resolver: Resolvers = {
     user: async (_, { id }) => {
       return await User.findByPk(id)
     },
+    userIsLoggedIn: async (_, __, { currentUser }) => {
+      return !!currentUser
+    },
   },
 }
 export default resolver
