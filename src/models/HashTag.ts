@@ -36,6 +36,7 @@ export function init(sequelize: Sequelize) {
       postID: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        unique: true,
         field: 'post_id',
       },
       createdAt: {
@@ -61,12 +62,12 @@ export function associate() {
   HashTag.Posts = HashTag.belongsToMany(Post, {
     as: 'posts',
     through: PostHashTagConnection,
-    foreignKey: 'hashtag_id',
-    otherKey: 'post_id',
+    foreignKey: 'hashtagID',
+    otherKey: 'postID',
   })
 
   HashTag.PostConnection = HashTag.hasMany(PostHashTagConnection, {
     as: 'postConnections',
-    foreignKey: 'hashtag_id',
+    foreignKey: 'hashtagID',
   })
 }

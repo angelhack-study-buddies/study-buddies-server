@@ -29,11 +29,19 @@ export function init(sequelize: Sequelize) {
         allowNull: false,
         field: 'hashtag_id',
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at',
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at',
+      },
     },
     {
       sequelize,
       tableName: 'post_hashtag_connection',
-      timestamps: false,
+      timestamps: true,
     },
   )
 }
@@ -41,11 +49,11 @@ export function init(sequelize: Sequelize) {
 export function associate() {
   PostHashTagConnection.Post = PostHashTagConnection.belongsTo(Post, {
     as: 'post',
-    foreignKey: 'post_id',
+    foreignKey: 'postID',
   })
 
   PostHashTagConnection.HashTag = PostHashTagConnection.belongsTo(HashTag, {
     as: 'hashtag',
-    foreignKey: 'hashtag_id',
+    foreignKey: 'hashtagID',
   })
 }

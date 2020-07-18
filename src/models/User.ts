@@ -3,30 +3,35 @@ import {
   Model,
   Sequelize,
   HasMany,
-  BelongsToMany,
   HasManyGetAssociationsMixin,
+  BelongsToMany,
   BelongsToManyGetAssociationsMixin,
 } from 'sequelize'
 import { Post } from './Post'
-import { Follow } from './Follow'
+import { LikePost } from './LikePost'
 
 export class User extends Model {
   readonly id!: string
-  name?: string
-  email?: string
-  profileURL?: string
-  createdAt!: Date
-  updatedAt!: Date
-  deletedAt?: Date
+  public name?: string
+  public email?: string
+  public profileURL?: string
+  public createdAt!: Date
+  public updatedAt!: Date
+  public deletedAt?: Date
+  static Posts: HasMany<User, Post>
+  public getPosts: HasManyGetAssociationsMixin<Post>
 
-  public static Posts: HasMany<User, Post>
-  public getPosts!: HasManyGetAssociationsMixin<Post>
+  public static PostsLike: BelongsToMany<User, Post>
+  public getPostsLike!: BelongsToManyGetAssociationsMixin<Post>
 
-  public static Followers: BelongsToMany<User, User>
-  public getFollowers!: BelongsToManyGetAssociationsMixin<User>
+  static Followers: HasMany<User, User>
+  public getFollowers: HasManyGetAssociationsMixin<User>
 
-  public static FollowingUsers: BelongsToMany<User, User>
-  public getFollowingUsers!: BelongsToManyGetAssociationsMixin<User>
+  static Followings: HasMany<User, User>
+  public getFollowings: HasManyGetAssociationsMixin<User>
+
+  public static LikePost: HasMany<User, LikePost>
+  // public getLikePosts: HasManyGetAssociationsMixin<LikePost>
 }
 
 export function init(sequelize: Sequelize) {
@@ -73,16 +78,24 @@ export function init(sequelize: Sequelize) {
 export function associate() {
   User.Posts = User.hasMany(Post, {
     as: 'posts',
-    foreignKey: 'author_id',
+    foreignKey: 'authorID',
   })
-  User.Followers = User.belongsToMany(User, {
+  User.Followers = User.hasMany(User, {
     as: 'followers',
-    through: Follow,
-    foreignKey: 'follower_id',
+    foreignKey: 'followingID',
   })
-  User.FollowingUsers = User.belongsToMany(User, {
-    as: 'followingUsers',
-    through: Follow,
-    foreignKey: 'following_id',
+  User.Followings = User.hasMany(User, {
+    as: 'followings',
+    foreignKey: 'followerID',
   })
+  // User.PostsLike = User.belongsToMany(Post, {
+  //   as: 'postsLike',
+  //   through: LikePost,
+  //   foreignKey: 'authorID',
+  //   otherKey: 'postID',
+  // })
+  // User.LikePost = User.hasMany(LikePost, {
+  //   as: 'likePost',
+  //   foreignKey: 'authorID',
+  // })
 }

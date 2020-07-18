@@ -9,7 +9,7 @@ import { ApolloServer } from 'apollo-server-express'
 import { createServer } from 'http'
 
 import schema from './schema'
-import { sequelize } from './models'
+import { sequelizeInit } from './models'
 import { passportInitialize } from './passport'
 import {
   CLIENT_BASE_URL,
@@ -22,6 +22,7 @@ import {
 } from './config'
 
 async function run() {
+  const sequelize = await sequelizeInit()
   sequelize.sync()
   const app = express()
 

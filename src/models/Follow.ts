@@ -1,12 +1,12 @@
-import { Sequelize, Model, DataTypes, BelongsTo, BelongsToGetAssociationMixin } from 'sequelize'
+import { Sequelize, Model, DataTypes, BelongsTo } from 'sequelize'
 import { User } from '../models/User'
 
 export class Follow extends Model {
   public readonly id!: number
-  public followingUserID!: string
+  public followingID!: string
   public followerID!: string
-  public static Follower: BelongsTo<Follow, User>
-  public static FollowingUser: BelongsTo<Follow, User>
+  static Follower: BelongsTo<Follow, User>
+  static Following: BelongsTo<Follow, User>
 }
 
 export function init(sequelize: Sequelize) {
@@ -17,7 +17,7 @@ export function init(sequelize: Sequelize) {
         primaryKey: true,
         autoIncrement: true,
       },
-      followingUserID: {
+      followingID: {
         type: DataTypes.STRING,
         allowNull: false,
         field: 'following_id',
@@ -27,11 +27,19 @@ export function init(sequelize: Sequelize) {
         allowNull: false,
         field: 'follower_id',
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at',
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at',
+      },
     },
     {
       sequelize,
       tableName: 'follow',
-      timestamps: false,
+      timestamps: true,
     },
   )
 }
@@ -39,11 +47,10 @@ export function init(sequelize: Sequelize) {
 export function associate() {
   Follow.Follower = Follow.belongsTo(User, {
     as: 'follower',
-    foreignKey: 'follower_id',
+    foreignKey: 'followerID',
   })
-
-  Follow.FollowingUser = Follow.belongsTo(User, {
-    as: 'followingUser',
-    foreignKey: 'following_id',
+  Follow.Following = Follow.belongsTo(User, {
+    as: 'following',
+    foreignKey: 'followingID',
   })
 }

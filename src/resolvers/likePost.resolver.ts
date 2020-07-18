@@ -6,12 +6,12 @@ import { NOT_FOUND_ERROR, PERMISSION_ERROR } from '../errorMessages'
 
 const resolver: Resolvers = {
   LikePost: {
-    user: async likePost => {
-      return await likePost.getUser()
-    },
-    post: async likePost => {
-      return await likePost.getPost()
-    },
+    // user: async likePost => {
+    //   return await likePost.getUser()
+    // },
+    // post: async likePost => {
+    //   return await likePost.getPost()
+    // },
   },
   Mutation: {
     likePost: async (_, { postID }, { currentUser }) => {

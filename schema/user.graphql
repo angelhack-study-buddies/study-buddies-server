@@ -6,7 +6,7 @@ type User {
   consecutiveStudyDays: [Date!]!
   posts: [Post!]!
   followers: [User!]!
-  followingUsers: [User!]!
+  followings: [User!]!
   createdAt: Date
   updatedAt: Date
   deletedAt: Date
@@ -18,5 +18,5 @@ type Query {
 }
 
 type Mutation {
-  follow(followingUserID: ID!): Boolean
+  follow(followerID: ID!): Boolean
 }
