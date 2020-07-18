@@ -1,6 +1,8 @@
 import {
   BelongsTo,
   BelongsToGetAssociationMixin,
+  BelongsToMany,
+  BelongsToManyGetAssociationsMixin,
   DataTypes,
   HasMany,
   HasManyGetAssociationsMixin,
@@ -25,6 +27,9 @@ export class Post extends Model {
   public static Author: BelongsTo<Post, User>
   public getAuthor: BelongsToGetAssociationMixin<User>
 
+  public static UsersLike: BelongsToMany<Post, User>
+  public getUsersLike!: BelongsToManyGetAssociationsMixin<User>
+
   public static HashTag: HasMany<Post, HashTag>
   public static HashTagConnection: HasMany<Post, PostHashTagConnection>
   public getHashTags: HasManyGetAssociationsMixin<HashTag>
@@ -44,6 +49,7 @@ export function init(sequelize: Sequelize) {
       authorID: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         field: 'author_id',
       },
       url: {
@@ -54,7 +60,6 @@ export function init(sequelize: Sequelize) {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
-
       createdAt: {
         type: DataTypes.DATE,
         field: 'created_at',
@@ -82,17 +87,26 @@ export function init(sequelize: Sequelize) {
 export function associate() {
   Post.Author = Post.belongsTo(User, {
     as: 'author',
-    foreignKey: 'author_id',
+    foreignKey: 'authorID',
   })
   Post.HashTag = Post.belongsToMany(HashTag, {
     as: 'hashtags',
     through: PostHashTagConnection,
-    foreignKey: 'post_id',
-    otherKey: 'hashtag_id',
+    foreignKey: 'postID',
+    otherKey: 'hashtagID',
   })
   Post.HashTagConnection = Post.hasMany(PostHashTagConnection, {
     as: 'hashtagConnections',
-    foreignKey: 'post_id',
-    onDelete: 'cascade',
+    foreignKey: 'postID',
   })
+  // Post.UsersLike = Post.belongsToMany(User, {
+  //   as: 'usersLike',
+  //   through: LikePost,
+  //   foreignKey: 'postID',
+  //   otherKey: 'authorID',
+  // })
+  // Post.LikePost = Post.hasMany(LikePost, {
+  //   as: 'likePost',
+  //   foreignKey: 'postID',
+  // })
 }

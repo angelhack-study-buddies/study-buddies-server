@@ -11,7 +11,6 @@ import { throws } from 'assert'
 
 const resolverMap: Resolvers = {
   Post: {
-    // TODO: title, content, previewImage resolver 추가
     author: async post => {
       return await post.getAuthor()
     },

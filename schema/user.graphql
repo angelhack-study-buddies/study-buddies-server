@@ -4,6 +4,9 @@ type User {
   email: String
   profileURL: String
   consecutiveStudyDays: [Date!]!
+  posts: [Post!]!
+  followers: [User!]!
+  followings: [User!]!
   createdAt: Date
   updatedAt: Date
   deletedAt: Date
@@ -12,4 +15,8 @@ type User {
 type Query {
   user(id: ID!): User
   currentUser: User
+}
+
+type Mutation {
+  follow(followerID: ID!): Boolean
 }

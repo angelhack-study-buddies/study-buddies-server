@@ -1,18 +1,38 @@
-import { DataTypes, HasMany, HasManyGetAssociationsMixin, Model, Sequelize } from 'sequelize'
-
+import {
+  DataTypes,
+  Model,
+  Sequelize,
+  HasMany,
+  HasManyGetAssociationsMixin,
+  BelongsToMany,
+  BelongsToManyGetAssociationsMixin,
+} from 'sequelize'
 import { Post } from './Post'
+import { LikePost } from './LikePost'
+import { Follow } from './Follow'
 
 export class User extends Model {
   readonly id!: string
-  name?: string
-  email?: string
-  profileURL?: string
-  createdAt!: Date
-  updatedAt!: Date
-  deletedAt?: Date
+  public name?: string
+  public email?: string
+  public profileURL?: string
+  public createdAt!: Date
+  public updatedAt!: Date
+  public deletedAt?: Date
+  static Posts: HasMany<User, Post>
+  public getPosts: HasManyGetAssociationsMixin<Post>
 
-  public static Posts: HasMany<User, Post>
-  public getPosts!: HasManyGetAssociationsMixin<Post>
+  public static PostsLike: BelongsToMany<User, Post>
+  public getPostsLike!: BelongsToManyGetAssociationsMixin<Post>
+
+  static Followers: HasMany<User, User>
+  public getFollowers: HasManyGetAssociationsMixin<User>
+
+  static Followings: HasMany<User, User>
+  public getFollowings: HasManyGetAssociationsMixin<User>
+
+  public static LikePost: HasMany<User, LikePost>
+  // public getLikePosts: HasManyGetAssociationsMixin<LikePost>
 }
 
 export function init(sequelize: Sequelize) {
@@ -59,7 +79,27 @@ export function init(sequelize: Sequelize) {
 export function associate() {
   User.Posts = User.hasMany(Post, {
     as: 'posts',
-    foreignKey: 'author_id',
-    onDelete: 'cascade',
+    foreignKey: 'authorID',
   })
+  User.Followers = User.belongsToMany(User, {
+    as: 'followers',
+    through: Follow,
+    foreignKey: 'followingID',
+  })
+
+  User.Followings = User.belongsToMany(User, {
+    as: 'followings',
+    through: Follow,
+    foreignKey: 'followerID',
+  })
+  // User.PostsLike = User.belongsToMany(Post, {
+  //   as: 'postsLike',
+  //   through: LikePost,
+  //   foreignKey: 'authorID',
+  //   otherKey: 'postID',
+  // })
+  // User.LikePost = User.hasMany(LikePost, {
+  //   as: 'likePost',
+  //   foreignKey: 'authorID',
+  // })
 }
