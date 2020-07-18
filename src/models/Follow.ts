@@ -3,10 +3,8 @@ import { User } from '../models/User'
 
 export class Follow extends Model {
   public readonly id!: number
-  public followingID!: string
-  public followerID!: string
-  static Follower: BelongsTo<Follow, User>
-  static Following: BelongsTo<Follow, User>
+  public followingID: string
+  public followerID: string
 }
 
 export function init(sequelize: Sequelize) {
@@ -40,17 +38,10 @@ export function init(sequelize: Sequelize) {
       sequelize,
       tableName: 'follow',
       timestamps: true,
+      charset: 'utf8',
+      collate: 'utf8_unicode_ci',
     },
   )
 }
 
-export function associate() {
-  Follow.Follower = Follow.belongsTo(User, {
-    as: 'follower',
-    foreignKey: 'followerID',
-  })
-  Follow.Following = Follow.belongsTo(User, {
-    as: 'following',
-    foreignKey: 'followingID',
-  })
-}
+export function associate() {}

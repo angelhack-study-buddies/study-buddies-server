@@ -33,8 +33,8 @@ export async function sequelizeInit() {
   associateHashTag()
   associateFollow()
   associatePostHashTagConnection()
-  associateLikePost() // TODO:: Fix Foreign Key Error
+  associateLikePost()
 
-  await sequelize.sync()
+  await sequelize.sync({ force: true })
   return sequelize
 }

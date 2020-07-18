@@ -1,4 +1,5 @@
-import { Op } from 'sequelize'
+import { AuthenticationError } from 'apollo-server-express'
+import { PERMISSION_ERROR } from '../errorMessages'
 import { Resolvers } from '../generated/graphql'
 import { User } from '../models/User'
 import { Post } from '../models/Post'
@@ -9,15 +10,6 @@ const resolver: Resolvers = {
   User: {
     posts: async user => {
       return await user.getPosts()
-      // return await Post.findAll({
-      //   include: [
-      //     {
-      //       model: User,
-      //       as: 'author',
-      //       where: { id: { [Op.in]: user?.id } },
-      //     },
-      //   ],
-      // })
     },
     followers: async user => {
       return await user.getFollowers()
@@ -57,13 +49,10 @@ const resolver: Resolvers = {
     },
   },
   Mutation: {
-    // follow: async (_, { followingUserID }, { currentUser }) => {
-    follow: async (_, { followerID }) => {
-      // if (!currentUser) {
-      //   new AuthenticationError(PERMISSION_ERROR)
-      // }
-
-      const currentUser = await User.findByPk('111509060843271067545')
+    follow: async (_, { followerID }, { currentUser }) => {
+      if (!currentUser) {
+        new AuthenticationError(PERMISSION_ERROR)
+      }
 
       const followOption = {
         followingID: currentUser?.id,

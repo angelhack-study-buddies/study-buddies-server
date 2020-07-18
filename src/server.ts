@@ -23,7 +23,17 @@ import {
 
 async function run() {
   const sequelize = await sequelizeInit()
-  sequelize.sync()
+
+  process.on('SIGINT', async () => {
+    try {
+      await sequelize.close()
+      process.exit(0)
+    } catch (err) {
+      console.error(err)
+      process.exit(1)
+    }
+  })
+
   const app = express()
 
   app.use(compression())

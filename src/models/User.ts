@@ -9,6 +9,7 @@ import {
 } from 'sequelize'
 import { Post } from './Post'
 import { LikePost } from './LikePost'
+import { Follow } from './Follow'
 
 export class User extends Model {
   readonly id!: string
@@ -80,14 +81,29 @@ export function associate() {
     as: 'posts',
     foreignKey: 'authorID',
   })
-  User.Followers = User.hasMany(User, {
+  User.Followers = User.belongsToMany(User, {
     as: 'followers',
+    through: Follow,
     foreignKey: 'followingID',
+    // sourceKey: 'id',
   })
-  User.Followings = User.hasMany(User, {
+
+  User.Followings = User.belongsToMany(User, {
     as: 'followings',
+    through: Follow,
     foreignKey: 'followerID',
+    // sourceKey: 'id',
   })
+  // User.FollowerConnection = User.hasMany(Follow, {
+  //   as: 'followerConnection',
+  //   foreignKey: 'followerID',
+  //   sourceKey: 'id',
+  // })
+  // User.FollowingConnection = User.hasMany(Follow, {
+  //   as: 'followingConnection',
+  //   foreignKey: 'followingID',
+  //   sourceKey: 'id',
+  // })
   // User.PostsLike = User.belongsToMany(Post, {
   //   as: 'postsLike',
   //   through: LikePost,
