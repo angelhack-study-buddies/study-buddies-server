@@ -2,6 +2,7 @@ type Post {
   id: ID!
   author: User
   url: String
+  isLiked: Boolean
   likeCount: Int
   title: String # get from og-tag
   content: String # get from og-tag
@@ -23,13 +24,13 @@ type Mutation {
 input PostCreateInput {
   authorID: String!
   url: String!
-  hashtags: [String!]
+  hashTags: [String!]
 }
 
 input PostUpdateInput {
   id: ID!
   url: String
-  hashtags: [String!]
+  hashTags: [String!]
   likeCount: Int
 }
 

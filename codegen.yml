@@ -9,9 +9,9 @@ generates:
     config:
       useIndexSignature: true
       mappers:
-        User: ../models#User
-        HashTag: ../models#HashTag
-        Post: ../models#Post
-        LikePost: ../models#LikePost
+        User: ../models/User#User as UserModel
+        HashTag: ../models/HashTag#HashTag as HashTagModel
+        Post: ../models/Post#Post as PostModel
+        LikePost: ../models/LikePost#LikePost as LikePostModel
       scalars:
         Date: Date
