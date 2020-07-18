@@ -13,5 +13,6 @@ generates:
         HashTag: ../models/HashTag#HashTag as HashTagModel
         Post: ../models/Post#Post as PostModel
         LikePost: ../models/LikePost#LikePost as LikePostModel
+        Follow: ../models/Follow#Follow as FollowModel
       scalars:
         Date: Date

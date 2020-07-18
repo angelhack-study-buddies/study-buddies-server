@@ -1,3 +1,6 @@
+import { AuthenticationError } from 'apollo-server-express'
+import { Follow } from '../models/Follow'
+import { PERMISSION_ERROR } from '../errorMessages'
 import { Post } from '../models/Post'
 import { Resolvers } from '../generated/graphql'
 import { User } from '../models/User'
@@ -5,6 +8,15 @@ import differenceInDays from 'date-fns/differenceInDays'
 
 const resolver: Resolvers = {
   User: {
+    posts: async user => {
+      return await user.getPosts()
+    },
+    followers: async user => {
+      return await user.getFollowers()
+    },
+    followings: async user => {
+      return await user.getFollowings()
+    },
     consecutiveStudyDays: async user => {
       const posts = await Post.findAll({
         where: {
@@ -32,8 +44,30 @@ const resolver: Resolvers = {
     user: async (_, { id }) => {
       return await User.findByPk(id)
     },
-    userIsLoggedIn: async (_, __, { currentUser }) => {
-      return !!currentUser
+    currentUser: (_, __, { currentUser }) => {
+      return currentUser
+    },
+  },
+  Mutation: {
+    follow: async (_, { followerID }, { currentUser }) => {
+      if (!currentUser) {
+        new AuthenticationError(PERMISSION_ERROR)
+      }
+
+      const followOption = {
+        followingID: currentUser?.id,
+        followerID,
+      }
+
+      const follow = await Follow.findOne({ where: followOption })
+
+      if (!follow) {
+        const follow = await Follow.create(followOption)
+        return !!follow
+      }
+
+      await follow.destroy()
+      return false
     },
     recommendations: async (_, __, { currentUser }) => {
       const recentPosts = await Post.findAll({

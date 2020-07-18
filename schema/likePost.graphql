@@ -4,6 +4,6 @@ type LikePost {
   post: Post!
 }
 
-type Query {
+type Mutation {
   likePost(postID: ID!): Boolean
 }

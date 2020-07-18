@@ -4,15 +4,11 @@ import { Post } from './Post'
 import { User } from './User'
 
 export class LikePost extends Model {
-  public static Post: BelongsTo<LikePost, Post>
-  public static User: BelongsTo<LikePost, User>
-
   public readonly id!: number
   public postID!: number
   public userID!: string
-
-  public getUser: BelongsToGetAssociationMixin<User>
-  public getPost: BelongsToGetAssociationMixin<Post>
+  public static Post: BelongsTo<LikePost, Post>
+  public static User: BelongsTo<LikePost, User>
 }
 
 export function init(sequelize: Sequelize) {
@@ -33,19 +29,30 @@ export function init(sequelize: Sequelize) {
         allowNull: false,
         field: 'user_id',
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at',
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at',
+      },
     },
-    { sequelize, tableName: 'likepost', timestamps: false },
+    {
+      sequelize,
+      tableName: 'likepost',
+      timestamps: true,
+    },
   )
 }
 
 export function associate() {
-  LikePost.Post = LikePost.belongsTo(Post, {
-    as: 'post',
-    foreignKey: 'post_id',
-  })
-
-  LikePost.User = LikePost.belongsTo(User, {
-    as: 'user',
-    foreignKey: 'user_id',
-  })
+  // LikePost.Post = LikePost.belongsTo(Post, {
+  //   as: 'post',
+  //   foreignKey: 'postID',
+  // })
+  // LikePost.User = LikePost.belongsTo(User, {
+  //   as: 'user',
+  //   foreignKey: 'userID',
+  // })
 }
