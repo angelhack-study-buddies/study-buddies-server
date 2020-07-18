@@ -17,7 +17,7 @@ export class HashTag extends Model {
   updatedAt!: Date
   deletedAt?: Date
 
-  public static Post: BelongsToMany<HashTag, Post>
+  public static Posts: BelongsToMany<HashTag, Post>
   public static PostConnection: HasMany<HashTag, PostHashTagConnection>
   public getPosts!: BelongsToManyGetAssociationsMixin<Post>
 }
@@ -58,7 +58,7 @@ export function init(sequelize: Sequelize) {
 }
 
 export function associate() {
-  HashTag.Post = HashTag.belongsToMany(Post, {
+  HashTag.Posts = HashTag.belongsToMany(Post, {
     as: 'posts',
     through: PostHashTagConnection,
     foreignKey: 'hashtag_id',
