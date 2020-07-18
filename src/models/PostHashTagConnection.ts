@@ -1,4 +1,5 @@
-import { Sequelize, Model, DataTypes, BelongsTo } from 'sequelize'
+import { BelongsTo, DataTypes, Model, Sequelize } from 'sequelize'
+
 import { HashTag } from './HashTag'
 import { Post } from './Post'
 

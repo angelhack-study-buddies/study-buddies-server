@@ -1,11 +1,12 @@
 import {
-  DataTypes,
-  Model,
-  Sequelize,
-  HasMany,
   BelongsToMany,
   BelongsToManyGetAssociationsMixin,
+  DataTypes,
+  HasMany,
+  Model,
+  Sequelize,
 } from 'sequelize'
+
 import { Post } from './Post'
 import { PostHashTagConnection } from './PostHashTagConnection'
 
@@ -68,5 +69,6 @@ export function associate() {
   HashTag.PostConnection = HashTag.hasMany(PostHashTagConnection, {
     as: 'postConnections',
     foreignKey: 'hashtag_id',
+    onDelete: 'cascade',
   })
 }

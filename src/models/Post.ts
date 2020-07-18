@@ -9,9 +9,9 @@ import {
 } from 'sequelize'
 
 import { HashTag } from './HashTag'
+import { LikePost } from './LikePost'
 import { PostHashTagConnection } from './PostHashTagConnection'
 import { User } from './User'
-import { LikePost } from './LikePost'
 
 export class Post extends Model {
   readonly id!: number
@@ -93,5 +93,6 @@ export function associate() {
   Post.HashTagConnection = Post.hasMany(PostHashTagConnection, {
     as: 'hashtagConnections',
     foreignKey: 'post_id',
+    onDelete: 'cascade',
   })
 }
