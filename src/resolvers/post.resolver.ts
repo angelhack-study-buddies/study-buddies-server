@@ -62,13 +62,17 @@ const resolverMap: Resolvers = {
       return { posts }
     },
   },
-  // Mutation: {
-  //   async postCreate(_, { url, hashtags }, { models }) {
-  //     return Post.create({
-  //       url,
-  //       hashtags,
-  //     })
-  //   },
-  // },
+  Mutation: {
+    postCreate: async (_, { input }) => {
+      try {
+        const { authorID, url, hashtags } = input
+        const post = await Post.create({ authorID, url, hashtags })
+        return { post }
+      } catch (error) {
+        console.log(error)
+        throw new Error()
+      }
+    },
+  },
 }
 export default resolverMap
