@@ -1,10 +1,13 @@
-import ogs from 'open-graph-scraper'
-import { Op } from 'sequelize'
-
 import { PostOrderField, Resolvers } from '../generated/graphql'
-import { Post } from '../models/Post'
-import { LikePost } from '../models/LikePost'
+
 import { ApolloError } from 'apollo-server-express'
+import { HashTag } from '../models/HashTag'
+import { LikePost } from '../models/LikePost'
+import { Op } from 'sequelize'
+import { Post } from '../models/Post'
+import { PostHashTagConnection } from '../models/PostHashTagConnection'
+import ogs from 'open-graph-scraper'
+import { throws } from 'assert'
 
 const resolverMap: Resolvers = {
   Post: {
@@ -104,13 +107,72 @@ const resolverMap: Resolvers = {
       return { posts }
     },
   },
-  // Mutation: {
-  //   async postCreate(_, { url, hashtags }, { models }) {
-  //     return Post.create({
-  //       url,
-  //       hashtags,
-  //     })
-  //   },
-  // },
+  Mutation: {
+    postCreate: async (_, { input }) => {
+      try {
+        const { authorID, url, hashTags } = input
+        const post = await Post.create({ authorID, url })
+        await Promise.all(
+          hashTags.map(async hashTagName => {
+            const [hashTag] = await HashTag.findOrCreate({
+              where: { name: hashTagName, postID: post?.id },
+            })
+            await PostHashTagConnection.create({
+              postID: post?.id,
+              hashtagID: hashTag?.id,
+            })
+          }),
+        )
+        return { post }
+      } catch (error) {
+        console.log(error)
+        throw new Error(error)
+      }
+    },
+    postUpdate: async (_, { input }) => {
+      try {
+        const { id, url, hashTags, likeCount } = input
+        const post = await Post.findByPk(id)
+        const updatedPost = await post.update({
+          url: url,
+          likeCount: likeCount,
+        })
+
+        const currentTagConnections = await HashTag.findAll({
+          where: { postID: id },
+        })
+        currentTagConnections.map(current => {
+          current.destroy()
+        })
+        await Promise.all(
+          hashTags.map(async hashTagName => {
+            const [hashTag] = await HashTag.findOrCreate({
+              where: { name: hashTagName, postID: id },
+            })
+            await PostHashTagConnection.findOrCreate({
+              where: { postID: id, hashtagID: hashTag?.id },
+            })
+          }),
+        )
+
+        return { post: updatedPost }
+      } catch (error) {
+        console.log(error)
+        throw new Error(error)
+      }
+    },
+    postDelete: async (_, { id }) => {
+      try {
+        const post = await Post.findByPk(id)
+        return post
+          .destroy()
+          .then(() => true)
+          .catch(() => false)
+      } catch (error) {
+        console.log(error)
+        throw new Error(error)
+      }
+    },
+  },
 }
 export default resolverMap

@@ -4,3 +4,20 @@ type HashTag {
   post: Post
   createdAt: Date
 }
+
+type Query {
+  hashTag(id: ID!): HashTag
+}
+
+type Mutation {
+  hashTagCreate(input: HashTagCreateInput!): HashTagCreatePayload
+}
+
+input HashTagCreateInput {
+  name: String!
+  postID: ID!
+}
+
+type HashTagCreatePayload {
+  hashTag: HashTag
+}

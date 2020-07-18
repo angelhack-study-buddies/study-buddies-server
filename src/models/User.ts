@@ -85,25 +85,13 @@ export function associate() {
     as: 'followers',
     through: Follow,
     foreignKey: 'followingID',
-    // sourceKey: 'id',
   })
 
   User.Followings = User.belongsToMany(User, {
     as: 'followings',
     through: Follow,
     foreignKey: 'followerID',
-    // sourceKey: 'id',
   })
-  // User.FollowerConnection = User.hasMany(Follow, {
-  //   as: 'followerConnection',
-  //   foreignKey: 'followerID',
-  //   sourceKey: 'id',
-  // })
-  // User.FollowingConnection = User.hasMany(Follow, {
-  //   as: 'followingConnection',
-  //   foreignKey: 'followingID',
-  //   sourceKey: 'id',
-  // })
   // User.PostsLike = User.belongsToMany(Post, {
   //   as: 'postsLike',
   //   through: LikePost,

@@ -35,6 +35,6 @@ export async function sequelizeInit() {
   associatePostHashTagConnection()
   associateLikePost()
 
-  await sequelize.sync({ force: true })
+  await sequelize.sync()
   return sequelize
 }

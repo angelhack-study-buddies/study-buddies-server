@@ -14,7 +14,7 @@ type User {
 
 type Query {
   user(id: ID!): User
-  userIsLoggedIn: Boolean
+  currentUser: User
 }
 
 type Mutation {

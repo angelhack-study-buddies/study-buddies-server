@@ -1,11 +1,12 @@
 import {
-  DataTypes,
-  Model,
-  Sequelize,
-  HasMany,
   BelongsToMany,
   BelongsToManyGetAssociationsMixin,
+  DataTypes,
+  HasMany,
+  Model,
+  Sequelize,
 } from 'sequelize'
+
 import { Post } from './Post'
 import { PostHashTagConnection } from './PostHashTagConnection'
 
