@@ -19,6 +19,9 @@ export class Post extends Model {
   readonly id!: number
   authorID!: string
   url?: string
+  title?: string
+  description?: string
+  previewURL?: string
   likeCount?: number
   createdAt!: Date
   updatedAt!: Date
@@ -53,6 +56,16 @@ export function init(sequelize: Sequelize) {
       url: {
         // https://stackoverflow.com/questions/29458445/what-is-a-safe-maximum-length-a-segment-in-a-url-path-should-be/33733386
         type: DataTypes.TEXT,
+      },
+      title: {
+        type: DataTypes.STRING,
+      },
+      description: {
+        type: DataTypes.STRING,
+      },
+      previewURL: {
+        type: DataTypes.STRING,
+        field: 'preview_url',
       },
       likeCount: {
         type: DataTypes.INTEGER,

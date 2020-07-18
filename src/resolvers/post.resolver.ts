@@ -27,6 +27,7 @@ const resolver: Resolvers = {
       return likePosts?.length
     },
     title: async post => {
+      if (post?.title) return post?.title
       if (!post.url) return ''
       const { error, result } = await ogs({
         url: post.url,
@@ -38,6 +39,7 @@ const resolver: Resolvers = {
       return result?.ogTitle || ''
     },
     description: async post => {
+      if (post?.description) return post?.description
       if (!post.url) return ''
       const { error, result } = await ogs({
         url: post.url,
@@ -49,6 +51,7 @@ const resolver: Resolvers = {
       return result?.ogDescription || ''
     },
     previewImage: async post => {
+      if (post?.previewURL) return post?.previewURL
       if (!post.url) return ''
       const { error, result } = await ogs({
         url: post.url,
@@ -85,7 +88,22 @@ const resolver: Resolvers = {
     postCreate: async (_, { input }) => {
       try {
         const { authorID, url, hashTags } = input
-        const post = await Post.create({ authorID, url })
+
+        const { error, result } = await ogs({
+          url,
+          onlyGetOpenGraphInfo: true,
+        })
+
+        const post = await Post.create({
+          authorID,
+          url,
+          title: result?.ogTitle || '',
+          description: result?.ogDescription || '',
+          previewURL: result?.ogImage?.url || '',
+        })
+
+        if (error) throw new ApolloError(error)
+
         await Promise.all(
           hashTags.map(async hashTagName => {
             const [hashTag] = await HashTag.findOrCreate({
@@ -97,6 +115,7 @@ const resolver: Resolvers = {
             })
           }),
         )
+
         return { post }
       } catch (error) {
         console.log(error)
@@ -107,10 +126,24 @@ const resolver: Resolvers = {
       try {
         const { id: postID, url, hashTags, likeCount } = input
         const post = await Post.findByPk(postID)
-        const updatedPost = await post.update({
-          url: url,
-          likeCount: likeCount,
-        })
+
+        const updateOption = { url, likeCount }
+        if (url !== post?.url) {
+          const { error, result } = await ogs({
+            url,
+            onlyGetOpenGraphInfo: true,
+          })
+
+          if (error) throw new ApolloError(error)
+
+          Object.assign(updateOption, {
+            title: result?.ogTitle || '',
+            description: result?.ogDescription || '',
+            previewURL: result?.ogImage?.url || '',
+          })
+        }
+
+        const updatedPost = await post.update(updateOption)
 
         if (hashTags?.length) {
           await Promise.all(
