@@ -76,12 +76,12 @@ async function run() {
     '/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     (req, res) => {
-      res.redirect(CLIENT_BASE_URL)
+      res.redirect(encodeURI(CLIENT_BASE_URL))
     },
   )
   app.get('/logout', (req, res) => {
     req.session.destroy(() => {})
-    res.redirect(CLIENT_BASE_URL)
+    res.redirect(encodeURI(CLIENT_BASE_URL))
   })
 
   const server = new ApolloServer({
