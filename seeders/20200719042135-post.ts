@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -10,9 +10,8 @@ module.exports = {
      *   name: 'John Doe',
      *   isBetaMember: false
      * }], {});
-    */
+     */
   },
-
   down: async (queryInterface, Sequelize) => {
     /**
      * Add commands to revert seed here.
@@ -20,5 +19,5 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-  }
-};
+  },
+}
