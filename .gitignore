@@ -1,6 +1,5 @@
 /node_modules
 /dist
-graphql.ts
 
 # misc
 /.sass-cache
