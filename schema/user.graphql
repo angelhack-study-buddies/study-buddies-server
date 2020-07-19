@@ -18,5 +18,5 @@ type Query {
   currentUser: User
 }
 type Mutation {
-  follow(followerID: ID!): Boolean
+  follow(followingID: ID!): Boolean
 }

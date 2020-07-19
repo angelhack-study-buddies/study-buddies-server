@@ -98,14 +98,13 @@ const resolver: Resolvers = {
     },
   },
   Mutation: {
-    follow: async (_, { followerID }, { currentUser }) => {
+    follow: async (_, { followingID }, { currentUser }) => {
       if (!currentUser) {
         new AuthenticationError(PERMISSION_ERROR)
       }
-
       const followOption = {
-        followingID: currentUser?.id,
-        followerID,
+        followingID,
+        followerID: currentUser?.id,
       }
 
       const follow = await Follow.findOne({ where: followOption })
