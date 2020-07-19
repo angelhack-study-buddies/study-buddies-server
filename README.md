@@ -3,9 +3,15 @@
 "Education content sharing platform, Study Buddies"
 
 This is `Study Buddies server`
-You can see ainized project in ainize! :)
+You can play in our graphql playground! :)
 
-[![Run on Ainize](https://ainize-dev.herokuapp.com/images/run_on_ainize_button.svg)](https://ainize-dev.web.app/redirect?git_repo=https://github.com/angelhack-study-buddies/study-buddies-server)
+```graphql
+query {
+  helloWorld
+}
+```
+
+[![Run on Ainize](https://ainize-dev.herokuapp.com/images/run_on_ainize_button.svg)](https://master-study-buddies-server-angelhack-study-buddies.endpoint.dev.ainize.ai/graphql)
 
 ## Run
 
