@@ -1008,7 +1008,7 @@
     form-data "3.0.0"
     tslib "~2.0.0"
 
-"@graphql-tools/load-files@6.0.14":
+"@graphql-tools/load-files@6.0.14", "@graphql-tools/load-files@^6.0.14":
   version "6.0.14"
   resolved "https://registry.yarnpkg.com/@graphql-tools/load-files/-/load-files-6.0.14.tgz#38eda42b42719929a0e91ffda0064755cd0e7417"
   integrity sha512-iasJq7bagofDwW4vQP5xYSgBfio6QA9rLg1ETkOjC1UU3HPFAfNLhvx+YxQXMto7yWM/nMffoYJiGn4PxqOKSw==
@@ -1056,7 +1056,7 @@
     "@graphql-tools/utils" "6.0.12"
     tslib "~2.0.0"
 
-"@graphql-tools/merge@6.0.14":
+"@graphql-tools/merge@6.0.14", "@graphql-tools/merge@^6.0.14":
   version "6.0.14"
   resolved "https://registry.yarnpkg.com/@graphql-tools/merge/-/merge-6.0.14.tgz#6ea3148b5d7261e6eeb05ca034f86ebac42b2bea"
   integrity sha512-j/Gi+9qFKip0nHIU/7G2Gy/sV1WX1XK90FaGmfpdduuRjuET+44X/XBQbYMWMTtSFKHU+nzqv4J7vVxbi0m3lg==
