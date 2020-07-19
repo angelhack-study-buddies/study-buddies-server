@@ -15,7 +15,7 @@ type User {
 type Query {
   user(id: ID!): User
   currentUser: User
-  recommendations: [Post!]!
+  recommendations: [Post]
 }
 
 type Mutation {

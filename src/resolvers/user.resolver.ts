@@ -56,10 +56,12 @@ const resolver: Resolvers = {
         limit: 5,
       })
       const hashTags = []
-      recentPosts.map(async post => {
-        const tags = post.getHashTags()
-        ;(await tags).map(async tag => await (hashTags.indexOf(tag) === -1 ? hashTags.push(tag) : ''))
-      })
+      await Promise.all(
+        recentPosts.map(async post => {
+          const tags = post.getHashTags()
+          ;(await tags).map(async tag => await (hashTags.indexOf(tag) === -1 ? hashTags.push(tag) : ''))
+        }),
+      )
       const post = Post.findAll({
         where: {
           hashTags: hashTags,
