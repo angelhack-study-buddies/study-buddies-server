@@ -88,6 +88,7 @@ async function run() {
     schema,
     context: ({ req }) => ({ currentUser: req.user }),
     validationRules: [depthLimit(7)],
+    introspection: true,
     playground: true,
   })
 
