@@ -4,9 +4,6 @@ import { HashTag } from './HashTag'
 import { Post } from './Post'
 
 export class PostHashTagConnection extends Model {
-  public static Post: BelongsTo<PostHashTagConnection, Post>
-  public static HashTag: BelongsTo<PostHashTagConnection, HashTag>
-
   public readonly id!: number
   public postID!: number
   public hashtagID!: number
@@ -47,14 +44,4 @@ export function init(sequelize: Sequelize) {
   )
 }
 
-export function associate() {
-  PostHashTagConnection.Post = PostHashTagConnection.belongsTo(Post, {
-    as: 'post',
-    foreignKey: 'postID',
-  })
-
-  PostHashTagConnection.HashTag = PostHashTagConnection.belongsTo(HashTag, {
-    as: 'hashtag',
-    foreignKey: 'hashtagID',
-  })
-}
+export function associate() {}

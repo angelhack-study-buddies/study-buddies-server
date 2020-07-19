@@ -1,11 +1,4 @@
-import {
-  BelongsToMany,
-  BelongsToManyGetAssociationsMixin,
-  DataTypes,
-  HasMany,
-  Model,
-  Sequelize,
-} from 'sequelize'
+import { BelongsToMany, BelongsToManyGetAssociationsMixin, DataTypes, Model, Sequelize } from 'sequelize'
 
 import { Post } from './Post'
 import { PostHashTagConnection } from './PostHashTagConnection'
@@ -19,7 +12,6 @@ export class HashTag extends Model {
   deletedAt?: Date
 
   public static Posts: BelongsToMany<HashTag, Post>
-  public static PostConnection: HasMany<HashTag, PostHashTagConnection>
   public getPosts!: BelongsToManyGetAssociationsMixin<Post>
 }
 
@@ -37,7 +29,6 @@ export function init(sequelize: Sequelize) {
       postID: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
         field: 'post_id',
       },
       createdAt: {
@@ -64,11 +55,10 @@ export function associate() {
     as: 'posts',
     through: PostHashTagConnection,
     foreignKey: 'hashtagID',
-    otherKey: 'postID',
   })
 
-  HashTag.PostConnection = HashTag.hasMany(PostHashTagConnection, {
-    as: 'postConnections',
-    foreignKey: 'hashtagID',
-  })
+  // HashTag.PostConnection = HashTag.hasMany(PostHashTagConnection, {
+  //   as: 'postConnections',
+  //   foreignKey: 'hashtagID',
+  // })
 }
