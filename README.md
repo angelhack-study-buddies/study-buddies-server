@@ -1,11 +1,18 @@
 # Study-Buddies-Server
 
+"Education content sharing platform, Study Buddies"
+
+This is `Study Buddies server`
+You can see ainized project in ainize! :)
+
+[![Run on Ainize](https://ainize-dev.herokuapp.com/images/run_on_ainize_button.svg)](https://ainize-dev.web.app/redirect?git_repo=https://github.com/angelhack-study-buddies/study-buddies-server)
+
 ## Run
 
+- build: `yarn build`
 - run: `yarn dev`
 - playground: `http://localhost:3000/graphql`
 - lint: `yarn lint`
-- test: `yarn test`
 
 ## Linting
 
@@ -16,6 +23,8 @@
 
 - add `.env` file to project root
 - add variables to `.env`
+
+For example,
 
 ```
 MY_NAME=STUDY_BUDDIES
@@ -30,9 +39,16 @@ export const MY_NAME = process.env.MY_NAME
 **env vars list**
 
 - GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET: google oauth login
-- MYSQL\_\*: mysql db config
+- local mysql db config ([run docker container](#connect-db))
+  - MYSQL_DATABASE=studybuddies
+  - MYSQL_USERNAME=root
+  - MYSQL_PASSWORD=1234
+  - MYSQL_HOST=127.0.0.1
+  - MYSQL_PORT=9876
 - SERVER_BASE_URL: server endpoint
+- CLIENT_BASE_URL: need for redirecting to client
 - NODE_ENV: development or production
+- COOKIE_SECRET: for storing session
 
 ## Connect DB
 
