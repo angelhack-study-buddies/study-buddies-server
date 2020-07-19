@@ -14,5 +14,6 @@ generates:
         Post: ../models/Post#Post as PostModel
         LikePost: ../models/LikePost#LikePost as LikePostModel
         Follow: ../models/Follow#Follow as FollowModel
+        PostHashTagConnection: ../models/PostHashTagConnection#PostHashTagConnection as PostHashTagConnectionModel
       scalars:
         Date: Date

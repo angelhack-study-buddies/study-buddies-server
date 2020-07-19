@@ -19,22 +19,24 @@ export class Post extends Model {
   readonly id!: number
   authorID!: string
   url?: string
+  title?: string
+  description?: string
+  previewURL?: string
   likeCount?: number
   createdAt!: Date
   updatedAt!: Date
   deletedAt?: Date
 
-  public static Author: BelongsTo<Post, User>
+  static Author: BelongsTo<Post, User>
   public getAuthor: BelongsToGetAssociationMixin<User>
 
-  public static UsersLike: BelongsToMany<Post, User>
+  static UsersLike: BelongsToMany<Post, User>
   public getUsersLike!: BelongsToManyGetAssociationsMixin<User>
 
-  public static HashTag: HasMany<Post, HashTag>
-  public static HashTagConnection: HasMany<Post, PostHashTagConnection>
-  public getHashTags: HasManyGetAssociationsMixin<HashTag>
+  static HashTags: BelongsToMany<Post, HashTag>
+  public getHashTags: BelongsToManyGetAssociationsMixin<HashTag>
 
-  public static LikePost: HasMany<Post, LikePost>
+  static LikePost: HasMany<Post, LikePost>
   public getLikePosts: HasManyGetAssociationsMixin<LikePost>
 }
 
@@ -49,16 +51,26 @@ export function init(sequelize: Sequelize) {
       authorID: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
         field: 'author_id',
       },
       url: {
         // https://stackoverflow.com/questions/29458445/what-is-a-safe-maximum-length-a-segment-in-a-url-path-should-be/33733386
         type: DataTypes.TEXT,
       },
+      title: {
+        type: DataTypes.STRING,
+      },
+      description: {
+        type: DataTypes.STRING,
+      },
+      previewURL: {
+        type: DataTypes.STRING,
+        field: 'preview_url',
+      },
       likeCount: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
+        field: 'like_count',
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -89,14 +101,9 @@ export function associate() {
     as: 'author',
     foreignKey: 'authorID',
   })
-  Post.HashTag = Post.belongsToMany(HashTag, {
+  Post.HashTags = Post.belongsToMany(HashTag, {
     as: 'hashtags',
     through: PostHashTagConnection,
-    foreignKey: 'postID',
-    otherKey: 'hashtagID',
-  })
-  Post.HashTagConnection = Post.hasMany(PostHashTagConnection, {
-    as: 'hashtagConnections',
     foreignKey: 'postID',
   })
   // Post.UsersLike = Post.belongsToMany(User, {
