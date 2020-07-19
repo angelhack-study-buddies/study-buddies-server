@@ -5,6 +5,7 @@ type User {
   profileURL: String
   consecutiveStudyDays: [Date!]!
   posts: [Post!]!
+  recommendations(limit: Int): [Post!]! # limit: default 10
   followers: [User!]!
   followings: [User!]!
   createdAt: Date
@@ -15,12 +16,7 @@ type User {
 type Query {
   user(id: ID!): User
   currentUser: User
-  recommendations: RecommendationsPayload
 }
 type Mutation {
   follow(followerID: ID!): Boolean
-}
-
-type RecommendationsPayload {
-  posts: [Post!]!
 }
