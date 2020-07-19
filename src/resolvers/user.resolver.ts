@@ -1,3 +1,5 @@
+import omitBy from 'lodash/omitBy'
+import { Op } from 'sequelize'
 import { AuthenticationError } from 'apollo-server-express'
 import { Follow } from '../models/Follow'
 import { PERMISSION_ERROR } from '../errorMessages'
@@ -5,6 +7,7 @@ import { Post } from '../models/Post'
 import { Resolvers } from '../generated/graphql'
 import { User } from '../models/User'
 import differenceInDays from 'date-fns/differenceInDays'
+import { HashTag } from '../models/HashTag'
 
 const resolver: Resolvers = {
   User: {
@@ -39,20 +42,11 @@ const resolver: Resolvers = {
 
       return consecutiveStudyDays
     },
-  },
-  Query: {
-    user: async (_, { id }) => {
-      return await User.findByPk(id)
-    },
-    currentUser: (_, __, { currentUser }) => {
-      return currentUser
-    },
-
-    recommendations: async (_, __, { currentUser }) => {
+    recommendations: async (_, { limit }, { currentUser }) => {
       const recentPosts = await Post.findAll({
         where: {
-          authorID: currentUser.id,
-          deltedAt: null,
+          authorID: currentUser?.id,
+          deletedAt: null,
         },
         order: [['createdAt', 'DESC']],
         limit: 5,
@@ -64,22 +58,43 @@ const resolver: Resolvers = {
           },
         ],
       })
-      const hashTags = []
-      await Promise.all(
-        recentPosts.map(async post => {
-          // @ts-ignore
-          const tags = post.hashtags
-          tags.map(async tag => await (hashTags.indexOf(tag) === -1 ? hashTags.push(tag) : ''))
-        }),
-      )
-      const posts = await Post.findAll({
-        where: {
-          hashTags: { in: hashTags },
-        },
-        order: ['likeCount'],
+
+      const hashTagNames: string[] = []
+      recentPosts.forEach(post => {
+        // @ts-ignore
+        post.hashtags.forEach((tag: HashTag) => {
+          if (hashTagNames.indexOf(tag.name) === -1) {
+            hashTagNames.push(tag.name)
+          }
+        })
       })
 
-      return { posts }
+      const likeClause = hashTagNames?.map(tagName => ({ [Op.like]: `%${tagName}%` }))
+      const likeOptions = { [Op.or]: likeClause }
+
+      const posts = await Post.findAll({
+        where: { authorID: { [Op.ne]: currentUser?.id }, deletedAt: null },
+        include: [
+          {
+            association: Post.HashTags,
+            as: 'hashtags',
+            attributes: ['name'],
+            where: { name: likeOptions },
+          },
+        ],
+        limit: limit || 10,
+        order: [['likeCount', 'DESC']],
+      })
+
+      return posts
+    },
+  },
+  Query: {
+    user: async (_, { id }) => {
+      return await User.findByPk(id)
+    },
+    currentUser: (_, __, { currentUser }) => {
+      return currentUser
     },
   },
   Mutation: {
