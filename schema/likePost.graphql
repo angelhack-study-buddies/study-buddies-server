@@ -1,0 +1,9 @@
+type LikePost {
+  id: ID!
+  user: User!
+  post: Post!
+}
+
+type Mutation {
+  likePost(postID: ID!): Boolean
+}

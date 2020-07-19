@@ -1,0 +1,22 @@
+type User {
+  id: ID!
+  name: String
+  email: String
+  profileURL: String
+  consecutiveStudyDays: [Date!]!
+  posts(orderBy: PostOrder, limit: Int): [Post!]! # orderBy: default { field: 'likeCount', direction: 'desc'}, limit: 10
+  recommendations(limit: Int): [Post!]! # limit: default 10
+  followers: [User!]!
+  followings: [User!]!
+  createdAt: Date
+  updatedAt: Date
+  deletedAt: Date
+}
+
+type Query {
+  user(id: ID!): User
+  currentUser: User
+}
+type Mutation {
+  follow(followingID: ID!): Boolean
+}

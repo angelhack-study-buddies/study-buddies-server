@@ -3,3 +3,13 @@ scalar Date
 type Query {
   helloWorld: String!
 }
+
+enum OrderDirection {
+  DESC
+  ASC
+}
+
+input Pagination {
+  page: Int!
+  pageSize: Int!
+}
