@@ -1,4 +1,3 @@
-import omitBy from 'lodash/omitBy'
 import { Op } from 'sequelize'
 import { AuthenticationError } from 'apollo-server-express'
 import { Follow } from '../models/Follow'
@@ -6,13 +5,16 @@ import { PERMISSION_ERROR } from '../errorMessages'
 import { Post } from '../models/Post'
 import { Resolvers } from '../generated/graphql'
 import { User } from '../models/User'
-import differenceInDays from 'date-fns/differenceInDays'
 import { HashTag } from '../models/HashTag'
 
 const resolver: Resolvers = {
   User: {
-    posts: async user => {
-      return await user.getPosts()
+    posts: async (user, { orderBy, limit }) => {
+      return await Post.findAll({
+        where: { authorID: user.id },
+        order: [[orderBy?.field || 'likeCount', orderBy?.direction || 'DESC']],
+        limit: limit || 10,
+      })
     },
     followers: async user => {
       return await user.getFollowers()
@@ -22,19 +24,17 @@ const resolver: Resolvers = {
     },
     consecutiveStudyDays: async user => {
       const posts = await Post.findAll({
-        where: {
-          authorID: user.id,
-        },
+        where: { authorID: user.id },
         order: [['created_at', 'DESC']],
       })
 
-      if (!posts.length) return []
+      if (!posts?.length) return []
 
       const consecutiveStudyDays =
         posts.length &&
         posts.reduce((accDays: Date[], post) => {
           const previousDate = accDays[accDays.length - 1]
-          if (!previousDate || differenceInDays(post?.createdAt, previousDate) <= 1) {
+          if (!previousDate || previousDate?.getDate() - post.createdAt?.getDate() === 1) {
             accDays.push(post?.createdAt)
           }
           return accDays
