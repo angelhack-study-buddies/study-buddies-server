@@ -47,28 +47,39 @@ const resolver: Resolvers = {
     currentUser: (_, __, { currentUser }) => {
       return currentUser
     },
+
     recommendations: async (_, __, { currentUser }) => {
       const recentPosts = await Post.findAll({
         where: {
           authorID: currentUser.id,
+          deltedAt: null,
         },
         order: [['createdAt', 'DESC']],
         limit: 5,
+        include: [
+          {
+            association: Post.HashTags,
+            as: 'hashtags',
+            attributes: ['name'],
+          },
+        ],
       })
       const hashTags = []
       await Promise.all(
         recentPosts.map(async post => {
-          const tags = post.getHashTags()
-          ;(await tags).map(async tag => await (hashTags.indexOf(tag) === -1 ? hashTags.push(tag) : ''))
+          // @ts-ignore
+          const tags = post.hashtags
+          tags.map(async tag => await (hashTags.indexOf(tag) === -1 ? hashTags.push(tag) : ''))
         }),
       )
-      const post = Post.findAll({
+      const posts = await Post.findAll({
         where: {
-          hashTags: hashTags,
+          hashTags: { in: hashTags },
         },
         order: ['likeCount'],
       })
-      return { post }
+
+      return { posts }
     },
   },
   Mutation: {
