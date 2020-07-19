@@ -39,7 +39,7 @@ async function run() {
   app.use(compression())
   app.use(cookieParser())
 
-  const CORSOption = { origin: true, credentials: true }
+  const CORSOption = { origin: '*', credentials: true }
   app.use(cors(CORSOption))
   // @ts-ignore
   const MysqlSessionStore = new MySQLStore(session)
@@ -92,7 +92,7 @@ async function run() {
     playground: true,
   })
 
-  server.applyMiddleware({ app, path: '/graphql', cors: { origin: true, credentials: true } })
+  server.applyMiddleware({ app, path: '/graphql', cors: { origin: '*', credentials: true } })
 
   const httpServer = createServer(app)
   httpServer.listen({ port: 3000 }, (): void =>
