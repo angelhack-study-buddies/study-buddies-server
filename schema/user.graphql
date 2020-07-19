@@ -15,8 +15,12 @@ type User {
 type Query {
   user(id: ID!): User
   currentUser: User
+  recommendations: RecommendationsPayload
 }
-
 type Mutation {
   follow(followerID: ID!): Boolean
+}
+
+type RecommendationsPayload {
+  posts: [Post!]!
 }
