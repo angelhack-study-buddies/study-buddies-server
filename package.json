@@ -62,7 +62,7 @@
     "graphql": "^15.3.0",
     "graphql-depth-limit": "^1.1.0",
     "graphql-import-node": "^0.0.4",
-    "graphql-tools": "^6.0.14",
+    "graphql-tools": "^6.2.6",
     "http": "0.0.1-security",
     "install": "^0.13.0",
     "jest": "^26.1.0",
