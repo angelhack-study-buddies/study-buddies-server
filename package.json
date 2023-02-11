@@ -35,7 +35,7 @@
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
     "graphql-import": "^1.0.2",
-    "nodemon": "^2.0.4",
+    "nodemon": "^2.0.20",
     "sequelize-cli": "^6.2.0",
     "ts-node": "^8.10.2"
   },
@@ -68,7 +68,7 @@
     "jest": "^26.1.0",
     "lodash": "^4.17.21",
     "mysql2": "^2.1.0",
-    "open-graph-scraper": "^4.4.0",
+    "open-graph-scraper": "^5.0.5",
     "passport": "^0.4.1",
     "passport-google": "^0.3.0",
     "passport-google-oauth": "^2.0.0",
