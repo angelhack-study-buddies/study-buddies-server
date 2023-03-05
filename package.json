@@ -73,7 +73,7 @@
     "passport-google": "^0.3.0",
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth20": "^2.0.0",
-    "sequelize": "^6.28.0",
+    "sequelize": "^6.29.0",
     "ts-jest": "^26.1.2",
     "typescript": "^3.9.6"
   }
